@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign-up Form</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:linear-gradient(135deg, #102E4A);
+}
+
+.container{
+    background:#FFF7E6;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    width:90%;
+    max-width:700px;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#333;
+}
+
+form{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.full-width{
+    grid-column:span 2;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#43302E
+}
+
+/* Password field */
+.password-box{
+    position:relative;
+    width:100%;
+}
+
+.password-box input{
+    width:100%;
+    padding:12px 45px 12px 12px;
+}
+
+.toggle{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:18px;
+    user-select:none;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#bad2da;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#22283f;
+    transform:scale(1.03);
+}
+
+#error{
+    color:red;
+    font-size:14px;
+    text-align:center;
+}
+
+.login{
+    display:flex;
+    justify-content:center;
+    margin-top:15px;
+}
+
+.login a{
+    text-decoration:none;
+    color:#102E4A;
+    font-weight:bold;
+}
+
+.login a:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:600px){
+    form{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:span 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Sign-up</h2>
+
+    <form id="signupForm">
+
+        <input type="text" placeholder="Full Name" required minlength="3">
+
+        <input type="email" placeholder="Email" required>
+
+        <input type="tel" placeholder="Phone Number" required minlength="10">
+
+        <!-- Password -->
+        <div class="password-box">
+            <input type="password" id="password" placeholder="Password" required minlength="6">
+            <span class="toggle" onclick="togglePassword('password', this)"></span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="password-box full-width">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required minlength="6">
+            <span class="toggle" onclick="togglePassword('confirmPassword', this)"></span>
+        </div>
+
+        <p id="error" class="full-width"></p>
+
+        <button type="submit" class="full-width">Sign Up</button>
+
+    </form>
+
+    <div class="login">
+        <p>Already have an account? <a href="#">Login</a></p>
+    </div>
+
+</div>
+
+<script>
+// Show/Hide Password
+function togglePassword(id, icon){
+    let input = document.getElementById(id);
+
+    if(input.type === "password"){
+        input.type = "text";
+    }else{
+        input.type = "password";
+    }
+}
+
+// Password Validation
+document.getElementById("signupForm").addEventListener("submit", function(event){
+
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let error = document.getElementById("error");
+
+    if(password !== confirmPassword){
+        event.preventDefault();
+        error.textContent = "Passwords do not match!";
+    }else{
+        error.textContent = "";
+        alert("Signup Successful!");
+    }
+
+});
+</script>
+
+</body>
+</html>

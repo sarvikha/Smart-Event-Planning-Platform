@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Management Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#eef2ff;
+}
+
+/* Header */
+header{
+    background:linear-gradient(90deg,#4f46e5,#2563eb);
+    color:white;
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+/* Container */
+.container{
+    width:90%;
+    margin:30px auto;
+}
+
+/* Dashboard Cards */
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    color:white;
+    text-align:center;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card i{
+    font-size:45px;
+    margin-bottom:15px;
+}
+
+.card h2{
+    font-size:42px;
+}
+
+.card p{
+    margin:12px 0;
+    font-size:18px;
+}
+
+.card button{
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    background:white;
+    color:#333;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.card button:hover{
+    background:#f1f1f1;
+}
+
+.purple{
+    background:linear-gradient(135deg,#6c63ff,#4a47a3);
+}
+
+.teal{
+    background:linear-gradient(135deg,#00b894,#00897b);
+}
+
+.amber{
+    background:linear-gradient(135deg,#f59e0b,#d97706);
+}
+
+.pink{
+    background:linear-gradient(135deg,#ec4899,#be185d);
+}
+
+/* Table Section */
+.section{
+    margin-top:40px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 12px rgba(0,0,0,0.15);
+}
+
+.section h2{
+    margin-bottom:20px;
+    color:#333;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#5e46e5;
+    color:white;
+}
+
+table th,
+table td{
+    padding:12px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+.status1{
+    color:green;
+    font-weight:bold;
+}
+
+.status2{
+    color:orange;
+    font-weight:bold;
+}
+
+.view-btn{
+    padding:6px 12px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.view-btn:hover{
+    background:#1d4ed8;
+}
+
+.scanner-section{
+    margin-top:30px;
+    display:grid;
+    gap:16px;
+}
+
+.scanner-card{
+    background:linear-gradient(135deg,#ffffff,#eef2ff);
+    border:1px solid #dbe3ff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 8px 20px rgba(79,70,229,0.15);
+}
+
+.scanner-header h2{
+    margin-bottom:8px;
+    color:#312e81;
+}
+
+.scanner-header p{
+    color:#4b5563;
+    line-height:1.6;
+}
+
+.scanner-controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin:16px 0;
+}
+
+.scanner-btn{
+    border:none;
+    border-radius:999px;
+    padding:10px 16px;
+    background:linear-gradient(135deg,#4f46e5,#2563eb);
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.scanner-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(37,99,235,0.2);
+}
+
+.scanner-btn-secondary{
+    background:linear-gradient(135deg,#64748b,#475569);
+}
+
+#reader{
+    width:100%;
+    max-width:480px;
+    margin:0 auto;
+    border-radius:16px;
+    overflow:hidden;
+    background:#0f172a;
+    min-height:280px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#reader video{
+    width:100%;
+    height:auto;
+    display:block;
+}
+
+.scanner-status,
+.scanner-result{
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:15px;
+    color:#1f2937;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.scanner-result strong{
+    color:#4f46e5;
+    word-break:break-all;
+}
+
+@media(max-width:768px){
+
+header{
+    font-size:24px;
+}
+
+.card h2{
+    font-size:34px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<i class="fa-solid fa-calendar-days"></i>
+Event Management Dashboard
+</header>
+
+<div class="container">
+
+<div class="dashboard">
+
+<div class="card purple">
+<i class="fas fa-layer-group"></i>
+<h2>4</h2>
+<p>Categories</p>
+<button>More Info</button>
+</div>
+
+<div class="card teal">
+<i class="fas fa-calendar-check"></i>
+<h2>35</h2>
+<p>Total Events</p>
+<button>More Info</button>
+</div>
+
+<div class="card amber">
+<i class="fas fa-users"></i>
+<h2>540</h2>
+<p>Registrations</p>
+<button>More Info</button>
+</div>
+
+<div class="card pink">
+<i class="fas fa-circle-check"></i>
+<h2>20</h2>
+<p>Completed</p>
+<button>More Info</button>
+</div>
+
+</div>
+
+<div class="section scanner-section">
+    <div class="scanner-card">
+        <div class="scanner-header">
+            <h2>QR Attendance Scanner</h2>
+            <p>Use your camera to scan a participant QR code and capture their registration details instantly.</p>
+        </div>
+
+        <div class="scanner-controls">
+            <button id="startScannerBtn" class="scanner-btn">Start Camera</button>
+            <button id="stopScannerBtn" class="scanner-btn scanner-btn-secondary">Stop Camera</button>
+        </div>
+
+        <div id="reader"></div>
+        <div id="scanner-status" class="scanner-status">Camera is idle. Start scanning to begin.</div>
+        <div id="scanner-result" class="scanner-result">Scanned value will appear here.</div>
+    </div>
+</div>
+
+<div class="section">
+
+<h2>Upcoming Events</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Event</th>
+<th>Category</th>
+<th>Date</th>
+<th>Venue</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Tech Fest</td>
+<td>Technical</td>
+<td>20 July 2026</td>
+<td>Auditorium</td>
+<td class="status2">Pending</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Cultural Night</td>
+<td>Cultural</td>
+<td>28 July 2026</td>
+<td>Main Hall</td>
+<td class="status1">Active</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Sports Meet</td>
+<td>Sports</td>
+<td>05 August 2026</td>
+<td>Ground</td>
+<td class="status1">Active</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Hackathon</td>
+<td>Technical</td>
+<td>15 August 2026</td>
+<td>Computer Lab 1</td>
+<td class="status2">Pending</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.0/html5-qrcode.min.js"></script>
+<script>
+    const scannerStatus = document.getElementById('scanner-status');
+    const scannerResult = document.getElementById('scanner-result');
+    const startScannerBtn = document.getElementById('startScannerBtn');
+    const stopScannerBtn = document.getElementById('stopScannerBtn');
+    const html5QrCode = new Html5Qrcode('reader');
+    let scanning = false;
+
+    async function startScanner() {
+        if (scanning) {
+            scannerStatus.textContent = 'Scanner is already active.';
+            return;
+        }
+
+        scannerStatus.textContent = 'Requesting camera access...';
+
+        try {
+            const devices = await Html5Qrcode.getCameras();
+
+            if (!devices || devices.length === 0) {
+                scannerStatus.textContent = 'No camera found on this device.';
+                scannerResult.textContent = 'Make sure your browser allows camera access.';
+                return;
+            }
+
+            const cameraId = devices[0].id;
+
+            await html5QrCode.start(
+                cameraId,
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText) => {
+                    scannerStatus.textContent = 'QR code detected successfully.';
+                    scannerResult.innerHTML = `Scanned value: <strong>${decodedText}</strong>`;
+                },
+                () => {
+                    // Ignore frame errors until a valid QR is found.
+                }
+            );
+
+            scanning = true;
+            scannerStatus.textContent = 'Camera is active. Point it at a QR code.';
+        } catch (error) {
+            console.error('QR scanner failed:', error);
+            scannerStatus.textContent = 'Unable to start the camera. Please allow camera permissions.';
+            scannerResult.textContent = 'Try refreshing the page and granting camera access.';
+        }
+    }
+
+    async function stopScanner() {
+        if (!scanning) {
+            scannerStatus.textContent = 'The scanner is already stopped.';
+            return;
+        }
+
+        try {
+            await html5QrCode.stop();
+            scanning = false;
+            scannerStatus.textContent = 'Camera stopped.';
+            scannerResult.textContent = 'Scanner paused. Start again when you are ready.';
+        } catch (error) {<
+            console.error('Unable to stop scanner:', error);
+            scannerStatus.textContent = 'Could not stop the scanner.';
+        }
+    }
+
+    startScannerBtn.addEventListener('click', startScanner);
+    stopScannerBtn.addEventListener('click', stopScanner);
+</script>
+
+</body>
+</html>

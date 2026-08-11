@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Event - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.5em; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; text-align: center; }
+        .warning { background: #fff3cd; padding: 20px; border-radius: 5px; margin-bottom: 30px; color: #856404; border: 1px solid #ffeaa7; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; text-align: left; }
+        select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; }
+        select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102, 126, 234, 0.2); }
+        .button-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        button { padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-delete:hover { background: #c82333; }
+        .btn-cancel { background: #6c757d; color: white; }
+        .btn-cancel:hover { background: #5a6268; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <a href="event_list.html">Events</a> / <a href="event_detail.html">Details</a> / <strong>Delete Event</strong>
+        </div>
+        
+        <header>
+            <h1>🗑️ Delete Event</h1>
+            <div class="btn-group">
+                <a href="event_detail.html">← Back</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="warning">
+                <strong>⚠️ Warning!</strong> This action cannot be undone. Please select the event carefully before confirming deletion.
+            </div>
+            
+            <form onsubmit="handleDeleteEvent(event)">
+                <div class="form-group">
+                    <label for="event">Select Event to Delete</label>
+                    <select id="event" required>
+                        <option>Choose an event...</option>
+                        <option>Event 001 - Annual Conference 2024</option>
+                        <option>Event 002 - Team Outing</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-delete">🗑️ Delete Event</button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='event_detail.html'">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="event_list.html">📋 View All Events</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function handleDeleteEvent(event) {
+            event.preventDefault();
+            if(confirm('Are you sure you want to delete this event? This cannot be undone.')) {
+                alert('✅ Event deleted successfully!');
+                window.location.href = 'event_list.html';
+            }
+        }
+    </script>
+</body>
+</html>

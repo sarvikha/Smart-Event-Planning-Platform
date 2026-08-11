@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Categories - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .category-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; }
+        .category-card h3 { margin-bottom: 10px; }
+        .category-card p { font-size: 0.9em; margin-bottom: 15px; }
+        .category-card a { background: rgba(255, 255, 255, 0.2); display: inline-block; margin: 5px 5px 5px 0; padding: 8px 12px; }
+        .category-card a:hover { background: rgba(255, 255, 255, 0.4); }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <strong>Event Categories</strong>
+        </div>
+        
+        <header>
+            <h1>📂 Event Categories</h1>
+            <div class="btn-group">
+                <a href="create_event_category.html">➕ Create Category</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="category-grid">
+                <div class="category-card">
+                    <h3>🔧 Technical</h3>
+                    <p>Technical events and workshops</p>
+                    <a href="edit_event_category.html">✏️ Edit</a>
+                    <a href="event_category_delete.html">🗑️ Delete</a>
+                </div>
+                
+                <div class="category-card">
+                    <h3>👥 Social</h3>
+                    <p>Social and team building events</p>
+                    <a href="edit_event_category.html">✏️ Edit</a>
+                    <a href="event_category_delete.html">🗑️ Delete</a>
+                </div>
+                
+                <div class="category-card">
+                    <h3>⚽ Sports</h3>
+                    <p>Sports and outdoor activities</p>
+                    <a href="edit_event_category.html">✏️ Edit</a>
+                    <a href="event_category_delete.html">🗑️ Delete</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="create_event_category.html">➕ Create New Category</a>
+                <a href="event_list.html" style="margin-left: 10px;">📋 View Events</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

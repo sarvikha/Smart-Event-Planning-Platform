@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event User Wishlist - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        table th { background: #f8f9fa; padding: 15px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
+        table td { padding: 12px 15px; border-bottom: 1px solid #ddd; }
+        table tr:hover { background: #f8f9fa; }
+        .priority-high { color: #dc3545; font-weight: 600; }
+        .priority-medium { color: #fd7e14; font-weight: 600; }
+        .priority-low { color: #28a745; font-weight: 600; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 0.85em; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-fulfilled { background: #d4edda; color: #155724; }
+        .action-links { display: flex; gap: 8px; }
+        .action-links a { color: white; padding: 5px 10px; font-size: 0.8em; text-decoration: none; border-radius: 3px; display: inline-block; }
+        .view-btn { background: #667eea; }
+        .delete-btn { background: #dc3545; }
+        .action-links a:hover { opacity: 0.9; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <strong>Event Wishlist</strong>
+        </div>
+        
+        <header>
+            <h1>🎁 Event User Wishlist</h1>
+            <div class="btn-group">
+                <a href="add_event_user_wish.html">➕ Add Wish</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Wish ID</th>
+                        <th>User</th>
+                        <th>Event</th>
+                        <th>Wish Description</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>W001</td>
+                        <td>John Doe</td>
+                        <td>Annual Conference 2024</td>
+                        <td>Keynote session on AI</td>
+                        <td><span class="priority-high">High</span></td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <div class="action-links">
+                                <a href="remove_event_user_wish.html" class="delete-btn">Remove</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>W002</td>
+                        <td>Jane Smith</td>
+                        <td>Annual Conference 2024</td>
+                        <td>Networking lunch</td>
+                        <td><span class="priority-medium">Medium</span></td>
+                        <td><span class="status-badge status-fulfilled">Fulfilled</span></td>
+                        <td>
+                            <div class="action-links">
+                                <a href="remove_event_user_wish.html" class="delete-btn">Remove</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="add_event_user_wish.html">➕ Add New Wish</a>
+                <a href="joinevent_list.html" style="margin-left: 10px;">📝 Join Events</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

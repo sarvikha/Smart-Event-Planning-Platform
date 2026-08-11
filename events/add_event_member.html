@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event Member - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.5em; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; font-family: inherit; }
+        input:focus, select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102, 126, 234, 0.2); }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .btn-cancel { background: #6c757d; }
+        .btn-cancel:hover { background: #5a6268; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <a href="complete_event_user_list.html">Members</a> / <strong>Add Member</strong>
+        </div>
+        
+        <header>
+            <h1>➕ Add Event Member</h1>
+            <div class="btn-group">
+                <a href="complete_event_user_list.html">← Back</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <form onsubmit="handleAddMember(event)">
+                <div class="form-group">
+                    <label for="event">Select Event *</label>
+                    <select id="event" required>
+                        <option>Choose an event...</option>
+                        <option>Event 001 - Annual Conference 2024</option>
+                        <option>Event 002 - Team Outing</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user">Select User *</label>
+                    <select id="user" required>
+                        <option>Choose a user...</option>
+                        <option>User 001 - John Doe</option>
+                        <option>User 002 - Jane Smith</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Member Role *</label>
+                    <select id="role" required>
+                        <option>Participant</option>
+                        <option>Organizer</option>
+                        <option>Volunteer</option>
+                        <option>Speaker</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit">✅ Add Member</button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='complete_event_user_list.html'">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="complete_event_user_list.html">👥 View Members</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function handleAddMember(event) {
+            event.preventDefault();
+            alert('✅ Member added successfully!');
+            window.location.href = 'complete_event_user_list.html';
+        }
+    </script>
+</body>
+</html>

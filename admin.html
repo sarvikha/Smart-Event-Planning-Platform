@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sarvikha Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --navy:#0c1220;
+    --navy-2:#141c30;
+    --blue:#2563eb;
+    --blue-dark:#1d4ed8;
+    --bg:#f2f4f8;
+    --card:#ffffff;
+    --border:#e5e9f0;
+    --text:#1b2130;
+    --muted:#6b7280;
+    --green:#16794f;
+    --green-dark:#126140;
+    --red:#dc2626;
+    --red-bg:#fdf0f0;
+    --amber:#b45309;
+    --amber-bg:#fff7e6;
+    --ok-bg:#e9f7ef;
+    --ok-text:#0e7a45;
+    --pending-bg:#fff4e0;
+    --pending-text:#a15c00;
+    --blue-tint:#e6eefc;
+    --topbar-bg:linear-gradient(90deg, var(--blue) 0%, #3b82f6 100%);
+    --topbar-color:#fff;
+    --topbar-link:#fff;
+    --sidebar-bg:var(--navy);
+    --sidebar-color:#c6cbd8;
+    --main-bg:var(--bg);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--navy) 0%, #1a2340 45%, var(--blue-dark) 100%);
+  }
+  .login-card{
+    background:var(--card);width:380px;max-width:90vw;border-radius:14px;
+    padding:36px 34px 30px;box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .login-card h1{font-size:22px;margin:0 0 4px;letter-spacing:.3px;}
+  .login-card p.sub{color:var(--muted);margin:0 0 24px;font-size:13.5px;}
+  .login-card label{font-size:12.5px;font-weight:600;color:#374151;display:block;margin-bottom:6px;}
+  .login-card input{
+    width:100%;padding:10px 12px;margin-bottom:16px;border:1px solid var(--border);
+    border-radius:8px;font-size:14px;background:#f8fafc;
+  }
+  .login-card input:focus{outline:none;border-color:var(--blue);background:#fff;}
+  .login-card button{
+    width:100%;padding:11px;border:none;border-radius:8px;background:var(--blue);
+    color:#fff;font-size:14.5px;font-weight:600;cursor:pointer;transition:.15s;
+  }
+  .login-card button:hover{background:var(--blue-dark);}
+  #loginError{color:var(--red);font-size:12.5px;margin:-8px 0 14px;display:none;}
+  .login-hint{margin-top:16px;font-size:11.5px;color:#9aa2b1;text-align:center;}
+  /* ---------- APP SHELL ---------- */
+  #app{display:none;min-height:100vh;}
+  .topbar{
+    position:fixed;top:0;left:260px;right:0;height:56px;background:var(--topbar-bg);
+    display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:20;
+  }
+  .topbar-left{display:flex;align-items:center;gap:22px;color:var(--topbar-color);}
+  .topbar-left .burger{cursor:pointer;font-size:20px;}
+  .topbar-left a{color:var(--topbar-link);text-decoration:none;font-size:14.5px;opacity:.95;}
+  .topbar-search-wrap{
+    position:relative;display:flex;align-items:center;width:340px;max-width:32vw;
+  }
+  .topbar-search{
+    background:#fff;border-radius:6px 0 0 6px;padding:7px 14px;width:100%;font-size:13.5px;color:var(--text);
+    border:none;outline:none;
+  }
+  .topbar-search::placeholder{color:#9aa2b1;}
+  .search-btn{
+    background:#e9edf5;border:none;border-radius:0 6px 6px 0;padding:0 14px;height:34px;
+    cursor:pointer;font-size:15px;color:#4b5563;display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .search-btn:hover{background:#dbe2ee;color:var(--blue-dark);}
+  .search-results{
+    display:none;position:absolute;top:40px;left:0;right:0;background:#fff;color:var(--text);
+    border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.22);max-height:420px;overflow:auto;z-index:150;
+  }
+  .search-results.show{display:block;}
+  .search-results .sr-meta{
+    padding:10px 16px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--border);
+    text-transform:uppercase;letter-spacing:.4px;font-weight:700;
+  }
+  .sr-group-label{
+    padding:8px 16px 4px;font-size:11px;font-weight:700;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.4px;
+  }
+  .sr-item{
+    padding:10px 16px;font-size:13.5px;cursor:pointer;display:flex;flex-direction:column;gap:2px;
+    border-bottom:1px solid var(--border);
+  }
+  .sr-item:hover{background:#f3f6fc;}
+  .sr-item .sr-title{color:#1f2937;font-weight:600;}
+  .sr-item .sr-sub{color:var(--muted);font-size:12px;}
+  .sr-empty{padding:24px 16px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;}
+  mark.sr-hl{background:#fde68a;color:inherit;padding:0 1px;border-radius:2px;}
+  /* ---------- FONT SIZE CONTROL ---------- */
+  .fontsize-menu{width:220px;}
+  .fs-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
+  .fs-btn{
+    width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:#f8fafc;
+    font-size:15px;font-weight:700;cursor:pointer;color:#1f2937;display:flex;align-items:center;justify-content:center;
+    transition:.12s;
+  }
+  .fs-btn:hover{background:#eef2f8;}
+  .fs-current{font-size:13.5px;font-weight:700;color:#374151;min-width:44px;text-align:center;}
+  .fs-presets{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .fs-preset{
+    cursor:pointer;border-radius:8px;border:1px solid var(--border);text-align:center;padding:8px 4px;
+    font-size:12px;font-weight:600;color:#374151;transition:.12s;
+  }
+  .fs-preset:hover{background:#f3f4f6;}
+  .fs-preset.active{border-color:#111827;background:#f3f4f6;}
+  .topbar-right{display:flex;align-items:center;gap:18px;color:var(--topbar-color);font-size:16px;}
+  .topbar-right .admin-name{font-size:13.5px;opacity:.95;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+  .admin-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.9);background:#fff;}
+  .admin-avatar-large{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--border);background:#f8fafc;display:block;}
+  .admin-picture-row{display:flex;align-items:center;gap:14px;}
+  .admin-picture-copy{display:flex;flex-direction:column;gap:8px;min-width:220px;}
+  .admin-picture-copy input[type="url"]{width:100%;}
+  .admin-picture-copy .img-hint{font-size:11.5px;color:var(--muted);margin-top:4px;}
+  .ticket-board{background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 2px rgba(20,30,60,.04);}
+  .ticket-board .ticket-board-head{
+    display:grid;grid-template-columns:1.1fr .85fr .82fr .74fr .78fr .88fr .76fr .88fr;align-items:center;
+    background:linear-gradient(90deg, #3452a2 0%, #17356d 100%);color:#fff;
+    min-height:42px;
+  }
+  .ticket-board .ticket-board-head .ticket-head-cell{padding:12px 14px;font-size:12px;font-weight:700;letter-spacing:.3px;}
+  .ticket-row{display:grid;grid-template-columns:1.1fr .85fr .82fr .74fr .78fr .88fr .76fr .88fr;align-items:center;min-height:76px;border-bottom:1px solid var(--border);background:#fff;}
+  .ticket-row:nth-child(even){background:#eef3f8;}
+  .ticket-row:last-child{border-bottom:none;}
+  .ticket-row .ticket-cell{padding:12px 14px;font-size:13px;color:#344054;}
+  .ticket-row .ticket-cell.event-name{font-weight:600;color:#1f2937;}
+  .ticket-row .ticket-cell.name{font-weight:600;color:#374151;}
+  .ticket-row .ticket-status-wrap{display:flex;align-items:center;justify-content:center;}
+  .ticket-status-badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;color:#fff;background:#147b58;}
+  .ticket-status-badge.pending{background:#64748b;} .ticket-status-badge.inactive{background:#a855f7;} 
+  .ticket-attendance-badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;}
+  .ticket-attendance-badge.present{background:#2ea171;color:#fff;}
+  .ticket-attendance-badge.not-attended{background:#d35243;color:#fff;}
+  .ticket-row .ticket-qr-cell{display:flex;align-items:center;justify-content:center;}
+  .ticket-row .ticket-qr-canvas{width:56px;height:56px;border-radius:6px;background:#fff;border:1px solid var(--border);padding:4px;display:block;}
+  .ticket-row .ticket-download-cell{display:flex;align-items:center;justify-content:center;}
+  .btn-download{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+  .btn-download:hover{background:var(--blue-dark);}
+  .ticket-empty{padding:30px;color:var(--muted);font-size:14px;}
+  .ticket-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px;
+    min-height:120px;
+  }
+  .ticket-card .ticket-text{flex:1;}
+  .ticket-card .ticket-text h4{margin:0 0 8px;font-size:20px;}
+  .ticket-card .ticket-text .ticket-muted{color:var(--muted);font-size:13px;margin-bottom:6px;}
+  .ticket-card .ticket-qr-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .ticket-card .ticket-qr-wrap .ticket-qr-img{width:150px;height:150px;border:1px solid var(--border);background:#fff;padding:8px;border-radius:6px;}
+  .ticket-card .ticket-id{font-size:11.5px;font-weight:700;color:var(--blue-dark);}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:260px;background:var(--sidebar-bg);overflow-y:auto;z-index:30;
+  }
+  .brand{padding:22px 20px 16px;color:#fff;font-size:22px;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);}
+  .brand-sub{background:var(--navy-2);color:#fff;text-align:center;font-weight:700;font-size:14px;padding:14px 10px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:12px 20px;color:var(--sidebar-color);font-size:14px;cursor:pointer;
+    border-bottom:1px solid rgba(255,255,255,.04);transition:.12s;
+  }
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+  .nav-item.active{background:var(--blue);color:#fff;}
+  .nav-icon{width:18px;text-align:center;}
+  .main{margin-left:260px;padding-top:56px;min-height:100vh;background:var(--main-bg);}
+  .page-head{
+    display:flex;align-items:center;justify-content:space-between;padding:26px 30px 10px;
+  }
+  .page-head h2{font-size:30px;font-weight:600;margin:0;}
+  .crumb{font-size:13.5px;color:var(--muted);}
+  .crumb a{color:var(--blue);text-decoration:none;}
+  .content-wrap{padding:14px 30px 40px;}
+  .card{background:var(--card);border-radius:8px;border:1px solid var(--border);box-shadow:0 1px 2px rgba(20,30,60,.04);margin-bottom:24px;}
+  .card-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border);}
+  .card-head h3{margin:0;font-size:21px;font-weight:600;}
+  .btn{border:none;padding:8px 16px;border-radius:6px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;}
+  .btn-green{background:var(--green);color:#fff;}
+  .btn-green:hover{background:var(--green-dark);}
+  .btn-blue{background:var(--blue);color:#fff;}
+  .btn-blue:hover{background:var(--blue-dark);}
+  .btn-outline-blue{background:#fff;border:1px solid var(--blue);color:var(--blue);padding:6px 14px;}
+  .btn-outline-blue:hover{background:#eff4ff;}
+  .btn-outline-red{background:#fff;border:1px solid var(--red);color:var(--red);padding:6px 14px;}
+  .btn-outline-red:hover{background:var(--red-bg);}
+  table{width:100%;border-collapse:collapse;}
+  thead th{
+    text-align:left;font-size:13.5px;color:#111827;font-weight:700;padding:14px 24px;border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:16px 24px;font-size:14px;border-bottom:1px solid var(--border);color:#1f2937;}
+  tbody tr:last-child td{border-bottom:none;}
+  .actions-cell{display:flex;gap:8px;}
+  .badge{padding:4px 12px;border-radius:20px;font-size:12.5px;font-weight:600;display:inline-block;}
+  .badge-registered{background:var(--blue-tint);color:var(--blue-dark);}
+  .badge-attended{background:var(--ok-bg);color:var(--ok-text);}
+  .badge-pending{background:var(--pending-bg);color:var(--pending-text);}
+  .badge-interested{background:#f3e8ff;color:#7e22ce;}
+  .empty-row td{text-align:center;color:var(--muted);padding:30px;font-style:italic;}
+  /* form */
+  .form-grid{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;}
+  .form-grid.single{grid-template-columns:1fr;max-width:480px;}
+  .field{display:flex;flex-direction:column;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:13px;font-weight:600;margin-bottom:6px;color:#374151;}
+  .field input,.field select,.field textarea{
+    padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;background:#fbfcfe;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+  .form-actions{grid-column:1/-1;display:flex;gap:10px;padding-top:6px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px 22px;}
+  .stat-card .num{font-size:28px;font-weight:700;}
+  .stat-card .lbl{font-size:13px;color:var(--muted);margin-top:4px;}
+  .shortcut-row{display:flex;gap:12px;padding:0 24px 24px;}
+  .toast{
+    position:fixed;top:70px;right:24px;background:#1f2937;color:#fff;padding:12px 20px;border-radius:8px;
+    font-size:13.5px;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(-8px);
+    transition:.25s;pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateY(0);}
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(15,20,35,.5);display:none;align-items:center;justify-content:center;z-index:200;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{background:#fff;border-radius:10px;width:480px;max-width:90vw;max-height:85vh;overflow:auto;}
+  .modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .modal-head h3{margin:0;font-size:18px;}
+  .modal-close{cursor:pointer;font-size:20px;color:var(--muted);background:none;border:none;}
+  .modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+  .modal-body .field label{font-size:13px;font-weight:600;margin-bottom:6px;color:#374151;}
+  .modal-body input,.modal-body select,.modal-body textarea{
+    padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;width:100%;
+  }
+  .modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+  .theme-menu{
+    display:none;position:absolute;top:38px;right:0;background:#fff;color:#1b2130;
+    border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.22);width:220px;padding:14px;z-index:150;
+  }
+  .theme-menu.show{display:block;}
+  .theme-menu-title{font-size:13px;font-weight:700;margin-bottom:10px;color:#374151;}
+  .theme-swatch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .theme-customizer{border-top:1px solid var(--border);margin-top:12px;padding-top:12px;}
+  .theme-custom-row{display:flex;align-items:center;justify-content:space-between;margin:8px 0;color:#374151;font-size:12px;}
+  .theme-custom-row label{font-weight:600;}
+  .theme-custom-row input[type="color"]{width:48px;height:34px;border:1px solid var(--border);border-radius:6px;background:#fff;padding:2px;}
+  .theme-custom-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
+  .theme-swatch{
+    cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;text-align:center;
+    padding:6px 4px 5px;transition:.12s;
+  }
+  .theme-swatch:hover{background:#f3f4f6;}
+  .theme-swatch.active{border-color:#111827;}
+  .theme-swatch .dot-row{display:flex;justify-content:center;gap:3px;margin-bottom:5px;}
+  .theme-swatch .dot{width:14px;height:14px;border-radius:50%;}
+  .theme-swatch .swatch-label{font-size:10.5px;color:#4b5563;}
+  .notif-badge{
+    position:absolute;top:-6px;right:-9px;background:var(--red);color:#fff;font-size:10px;
+    font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;
+    align-items:center;justify-content:center;padding:0 4px;line-height:1;
+  }
+  .notif-badge.show{display:flex;}
+  .notif-menu{width:320px;max-height:70vh;overflow:auto;right:0;}
+  .notif-list{display:flex;flex-direction:column;gap:2px;max-height:340px;overflow:auto;}
+  .notif-item{padding:10px 6px;border-bottom:1px solid var(--border);font-size:13px;color:#1f2937;}
+  .notif-item:last-child{border-bottom:none;}
+  .notif-item .notif-time{font-size:11px;color:var(--muted);margin-top:2px;}
+  .notif-empty{padding:20px 6px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;}
+  @media(max-width:900px){
+    .form-grid{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Admin Panel</h1>
+    <p class="sub">Sign in to manage Sarvikha events</p>
+    <div id="loginError">Invalid username or password.</div>
+    <form id="loginForm">
+      <label>Username</label>
+      <input id="loginUser" autocomplete="username" placeholder="admin" required>
+      <label>Password</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" required>
+      <button type="submit">Log In</button>
+    </form>
+    <div class="login-hint">Demo credentials — username: <b>admin</b> &nbsp;|&nbsp; password: <b>admin123</b></div>
+  </div>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div id="app">
+  <div class="sidebar">
+    <div class="brand">Admin Panel</div>
+    <div class="brand-sub">Sarvikha</div>
+    <div id="navList"></div>
+  </div>
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="burger">&#9776;</span>
+      <a href="#" onclick="navigate('dashboard');return false;">Home</a>
+      <a href="#" onclick="alert('Contact: sarvikha@gmail.com');return false;">Contact</a>
+    </div>
+    <div class="topbar-search-wrap">
+      <form id="searchForm" style="display:flex;width:100%;" onsubmit="return runGlobalSearch(event)">
+        <input id="globalSearchInput" class="topbar-search" type="text" placeholder="Search events, categories, participants..." autocomplete="off" oninput="onSearchInput()">
+        <button type="submit" class="search-btn" title="Search">&#128269;</button>
+      </form>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+    <div class="topbar-right" style="position:relative;">
+      <span style="cursor:pointer;" onclick="toggleFontMenu()" title="Change font size">Font</span>
+      <span style="cursor:pointer;" onclick="toggleThemeMenu()" title="Change theme">&#127912;</span>
+      <span style="position:relative;cursor:pointer;" onclick="toggleNotifMenu()" title="Notifications">
+        &#128276;<span id="notifBadge" class="notif-badge"></span>
+      </span>
+
+      <span class="admin-name" id="adminNameDisplay" onclick="openAdminProfile()" title="Click to edit admin details">&#128100; Admin</span>
+      <span style="cursor:pointer;" onclick="logout()" title="Log out">&#9211;</span>
+      <div id="fontSizeMenu" class="theme-menu fontsize-menu">
+        <div class="theme-menu-title">Font Size</div>
+        <div class="fs-controls">
+          <button type="button" class="fs-btn" onclick="adjustFontSize(-10)" title="Decrease font size">A&minus;</button>
+          <span class="fs-current" id="fsCurrentLabel">100%</span>
+          <button type="button" class="fs-btn" onclick="adjustFontSize(10)" title="Increase font size">A+</button>
+        </div>
+        <div class="fs-presets" id="fsPresetGrid"></div>
+      </div>
+      <div id="themeMenu" class="theme-menu">
+        <div class="theme-menu-title">Color Theme</div>
+        <div class="theme-swatch-grid" id="themeSwatchGrid"></div>
+        <div class="theme-customizer">
+          <div class="theme-menu-title" style="margin-top:12px;margin-bottom:8px;">Customize</div>
+          <div class="theme-custom-row">
+            <label for="topbarColorPicker">Topbar</label>
+            <input type="color" id="topbarColorPicker" aria-label="Topbar color">
+          </div>
+          <div class="theme-custom-row">
+            <label for="sidebarColorPicker">Sidebar</label>
+            <input type="color" id="sidebarColorPicker" aria-label="Sidebar color">
+          </div>
+          <div class="theme-custom-row">
+            <label for="mainPageColorPicker">Main Page</label>
+            <input type="color" id="mainPageColorPicker" aria-label="Main page color">
+          </div>
+          <div class="theme-custom-actions">
+            <button class="btn btn-blue" type="button" onclick="saveCustomThemeFromControls()">Apply</button>
+            <button class="btn" type="button" onclick="resetCustomTheme()">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div id="notifMenu" class="theme-menu notif-menu">
+        <div class="theme-menu-title" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Notifications</span>
+          <span id="notifClear" style="font-size:11.5px;font-weight:600;color:var(--blue);cursor:pointer;" onclick="clearNotifications()">Clear all</span>
+        </div>
+        <div id="notifList" class="notif-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-head">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="crumb"><a href="#" onclick="navigate('dashboard');return false;">Home</a> / <span id="pageCrumb">Dashboard</span></div>
+    </div>
+    <div class="content-wrap" id="content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Generic edit modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Edit</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn" style="background:#e5e7eb;color:#111" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-blue" id="modalSaveBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   IN-MEMORY DATA STORE
+============================================================ */
+let nextId = { category:4, event:4, participant:4, wish:3, wishUser:3, budget:2, expense:2 };
+
+let categories = [
+  {id:1, name:'Technology', description:'Tech talks, hackathons and fests'},
+  {id:2, name:'Cultural', description:'Music, dance and cultural nights'},
+  {id:3, name:'Sports', description:'Sports meets and tournaments'},
+];
+
+let events = [
+  {id:1, title:'Tech Fest', categoryId:1, date:'2026-08-14', location:'Main Auditorium', description:'Annual technology festival with workshops and competitions.'},
+  {id:2, title:'Cultural Night', categoryId:2, date:'2026-08-20', location:'Open Air Theatre', description:'An evening of music, dance and drama.'},
+  {id:3, title:'Sports Meet', categoryId:3, date:'2026-09-02', location:'University Stadium', description:'Inter-department sports championship.'},
+];
+
+let participants = [
+  {id:1, user:'Ashwin', eventId:1, status:'Registered'},
+  {id:2, user:'Sara', eventId:2, status:'Attended'},
+  {id:3, user:'Ravi', eventId:3, status:'Pending'},
+];
+
+let wishlist = [
+  {id:1, eventName:'AI Summit 2027', description:'A wishlist entry for a future AI-focused summit.'},
+  {id:2, eventName:'National Dance Championship', description:'Proposed inter-college dance competition.'},
+];
+
+let wishUsers = [
+  {id:1, user:'Meera', wishId:1},
+  {id:2, user:'Karthik', wishId:2},
+];
+
+// Budget tracking data
+let budgets = [
+  {id:1, title:'Main Events Fund', amount:50000, notes:'Primary fund for events'}
+];
+let expenses = [
+  {id:1, budgetId:1, title:'Sound system', amount:5000, date:'2026-07-20', note:'PA rental'}
+];
+
+
+/* ---- Persistence (localStorage) ---- */
+const STORAGE_KEY = 'sarvikha_admin_data_v1';
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d.categories) categories = d.categories;
+    if(d.events) events = d.events;
+    if(d.participants) participants = d.participants;
+    if(d.wishlist) wishlist = d.wishlist;
+    if(d.wishUsers) wishUsers = d.wishUsers;
+    if(d.budgets) budgets = d.budgets;
+    if(d.expenses) expenses = d.expenses;
+    if(d.nextId) nextId = d.nextId;
+  }catch(e){ console.warn('Could not load saved data', e); }
+}
+function saveData(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({categories, events, participants, wishlist, wishUsers, budgets, expenses, nextId}));
+  }catch(e){ console.warn('Could not save data', e); }
+}
+loadData();
+normalizeBudgetData();
+
+function normalizeBudgetData(){
+  budgets = (budgets || []).map((b,index) => {
+    const rawId = b.id != null ? b.id : b.budgetId;
+    const parsedId = Number(rawId);
+    const id = (rawId != null && Number.isFinite(parsedId)) ? parsedId : index + 1;
+    return {
+      id,
+      title: b.title || '',
+      amount: Number(b.amount) || 0,
+      notes: b.notes || b.note || '',
+    };
+  });
+  const maxBudgetId = budgets.reduce((max, b) => Math.max(max, Number(b.id) || 0), 0);
+  nextId.budget = Number(nextId.budget) || maxBudgetId + 1;
+  nextId.budget = Math.max(nextId.budget, maxBudgetId + 1);
+
+  expenses = (expenses || []).map((e,index) => {
+    const parsedExpenseId = Number(e.id);
+    return {
+      id: (e.id != null && Number.isFinite(parsedExpenseId)) ? parsedExpenseId : index + 1,
+      budgetId: Number.isFinite(Number(e.budgetId)) ? Number(e.budgetId) : null,
+      title: e.title || '',
+      amount: Number(e.amount) || 0,
+      date: e.date || '',
+      note: e.note || '',
+    };
+  });
+  const maxExpenseId = expenses.reduce((max, e) => Math.max(max, Number(e.id) || 0), 0);
+  nextId.expense = Number(nextId.expense) || maxExpenseId + 1;
+  nextId.expense = Math.max(nextId.expense, maxExpenseId + 1);
+}
+
+/* ============================================================
+   AUTH
+============================================================ */
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin123';
+
+const DEFAULT_ADMIN_PROFILE_PICTURE = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <rect width="96" height="96" rx="12" fill="#e6eefc"/>
+  <circle cx="48" cy="38" r="17" fill="#2563eb"/>
+  <path d="M24 78c2-18 18-30 24-30s22 12 24 30" fill="#1e40af"/>
+</svg>`)}`;
+
+let adminProfile = { name: 'Admin', username: ADMIN_USER, password: ADMIN_PASS, profilePicture: DEFAULT_ADMIN_PROFILE_PICTURE };
+const ADMIN_PROFILE_KEY = 'sarvikha_admin_profile_v1';
+function loadAdminProfile(){
+  try{
+    const raw = localStorage.getItem(ADMIN_PROFILE_KEY);
+    if(raw){
+      adminProfile = JSON.parse(raw);
+      if(!adminProfile.profilePicture && adminProfile.picture){
+        adminProfile.profilePicture = adminProfile.picture;
+      }
+      if(!adminProfile.profilePicture){
+        adminProfile.profilePicture = DEFAULT_ADMIN_PROFILE_PICTURE;
+      }
+    } else {
+      adminProfile.profilePicture = DEFAULT_ADMIN_PROFILE_PICTURE;
+    }
+  }catch(e){ console.warn('Could not load admin profile', e); adminProfile.profilePicture = DEFAULT_ADMIN_PROFILE_PICTURE; }
+}
+function saveAdminProfile(){
+  adminProfile.picture = adminProfile.profilePicture || '';
+  localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(adminProfile));
+}
+loadAdminProfile();
+
+function refreshAdminNameDisplay(){
+  const el = document.getElementById('adminNameDisplay');
+  if(el){
+    const picture = adminProfile.profilePicture || DEFAULT_ADMIN_PROFILE_PICTURE;
+    el.innerHTML = `<img class="admin-avatar" src="${picture}" alt=""> <span>${esc(adminProfile.name)}</span>`;
+  }
+}
+
+
+function openAdminProfile(){
+  const currentPicture = adminProfile.profilePicture || DEFAULT_ADMIN_PROFILE_PICTURE;
+  const urlInputValue = (adminProfile.profilePicture || '').startsWith('data:image/') ? '' : (adminProfile.profilePicture || '');
+
+  openModal('Edit Admin Details', `
+    <div class="field">
+      <label>Profile Picture</label>
+      <div class="admin-picture-row">
+        <img class="admin-avatar-large" id="ap_preview" src="${currentPicture}" alt="">
+        <div class="admin-picture-copy">
+          <input type="file" accept="image/*" id="ap_picture_upload" aria-label="Upload profile image">
+          <input type="url" id="ap_picture_url" value="${esc(urlInputValue)}" placeholder="https://example.com/profile.jpg">
+          <div class="img-hint">Recommended image size: 96x96 or larger.</div>
+          <button type="button" class="btn btn-outline-red" id="ap_clear_picture">Remove Picture</button>
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>Display Name</label><input id="ap_name" value="${esc(adminProfile.name)}"></div>
+    <div class="field"><label>Username</label><input id="ap_username" value="${esc(adminProfile.username)}"></div>
+    <div class="field"><label>New Password</label><input id="ap_password" type="password" placeholder="Leave blank to keep current password"></div>
+    <div class="field"><label>Confirm New Password</label><input id="ap_password2" type="password" placeholder="Re-enter new password"></div>
+  `, ()=>{
+    const name = document.getElementById('ap_name').value.trim();
+    const username = document.getElementById('ap_username').value.trim();
+    const pw1 = document.getElementById('ap_password').value;
+    const pw2 = document.getElementById('ap_password2').value;
+    const uploadedPicture = document.getElementById('ap_picture_url').value.trim();
+    if(uploadedPicture){
+      adminProfile.profilePicture = uploadedPicture;
+    }
+
+    if(!name){ toast('Display name is required'); return false; }
+    if(!username){ toast('Username is required'); return false; }
+    if(pw1 || pw2){
+      if(pw1.length < 4){ toast('Password must be at least 4 characters'); return false; }
+      if(pw1 !== pw2){ toast('Passwords do not match'); return false; }
+      adminProfile.password = pw1;
+    }
+    adminProfile.name = name;
+    adminProfile.username = username;
+    if(!adminProfile.profilePicture){
+      adminProfile.profilePicture = DEFAULT_ADMIN_PROFILE_PICTURE;
+    }
+    saveAdminProfile();
+    refreshAdminNameDisplay();
+    toast('Admin details updated');
+    addNotification(`Admin details were updated (name: "${name}")`);
+    return true;
+  });
+
+  const uploadInput = document.getElementById('ap_picture_upload');
+  const urlInput = document.getElementById('ap_picture_url');
+  const preview = document.getElementById('ap_preview');
+  const clearPictureButton = document.getElementById('ap_clear_picture');
+
+  if(uploadInput){
+    uploadInput.addEventListener('change', function(e){
+      const file = e.target.files && e.target.files[0];
+      if(!file) return;
+      if(!file.type.startsWith('image/')){
+        toast('Please choose an image file');
+        return;
+      }
+      if(file.size > 2 * 1024 * 1024){
+        toast('Please upload an image under 2 MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(){
+        const dataUrl = String(reader.result || '');
+        if(!dataUrl){ return; }
+        adminProfile.profilePicture = dataUrl;
+        if(preview){ preview.src = dataUrl; }
+        if(urlInput){ urlInput.value = ''; }
+        toast('Profile picture selected');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if(clearPictureButton){
+    clearPictureButton.addEventListener('click', function(){
+      adminProfile.profilePicture = DEFAULT_ADMIN_PROFILE_PICTURE;
+      if(preview){ preview.src = DEFAULT_ADMIN_PROFILE_PICTURE; }
+      if(urlInput){ urlInput.value = ''; }
+      toast('Profile picture reset');
+    });
+  }
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(u === adminProfile.username && p === adminProfile.password){
+    document.getElementById('loginError').style.display='none';
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    refreshAdminNameDisplay();
+    navigate('dashboard');
+  } else {
+    document.getElementById('loginError').style.display='block';
+  }
+});
+
+function logout(){
+  if(confirm('Log out of the admin panel?')){
+    document.getElementById('app').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+  }
+}
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
+let notifications = [];
+let notifNextId = 1;
+const NOTIF_KEY = 'sarvikha_admin_notifs_v1';
+
+function loadNotifications(){
+  try{
+    const raw = localStorage.getItem(NOTIF_KEY);
+    if(raw){
+      const d = JSON.parse(raw);
+      notifications = d.notifications || [];
+      notifNextId = d.notifNextId || 1;
+    }
+  }catch(e){ console.warn('Could not load notifications', e); }
+}
+function saveNotifications(){
+  localStorage.setItem(NOTIF_KEY, JSON.stringify({notifications, notifNextId}));
+}
+loadNotifications();
+
+function addNotification(message){
+  notifications.unshift({
+    id: notifNextId++,
+    message,
+    time: new Date().toLocaleString(),
+    read: false,
+  });
+  if(notifications.length > 50) notifications = notifications.slice(0, 50);
+  saveNotifications();
+  renderNotifBadge();
+  renderNotifList();
+}
+
+function renderNotifBadge(){
+  const badge = document.getElementById('notifBadge');
+  if(!badge) return;
+  const unread = notifications.filter(n=>!n.read).length;
+  if(unread > 0){
+    badge.textContent = unread > 9 ? '9+' : unread;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
+
+function renderNotifList(){
+  const list = document.getElementById('notifList');
+  if(!list) return;
+  if(notifications.length === 0){
+    list.innerHTML = `<div class="notif-empty">No notifications yet. Changes you make will show up here.</div>`;
+    return;
+  }
+  list.innerHTML = notifications.map(n=>`
+    <div class="notif-item">
+      <div>${esc(n.message)}</div>
+      <div class="notif-time">${esc(n.time)}</div>
+    </div>
+  `).join('');
+}
+
+function toggleNotifMenu(){
+  const menu = document.getElementById('notifMenu');
+  const opening = !menu.classList.contains('show');
+  document.getElementById('themeMenu').classList.remove('show');
+  menu.classList.toggle('show');
+  if(opening){
+    notifications.forEach(n=>n.read = true);
+    saveNotifications();
+    renderNotifBadge();
+  }
+}
+
+function clearNotifications(){
+  if(notifications.length && !confirm('Clear all notifications?')) return;
+  notifications = [];
+  saveNotifications();
+  renderNotifBadge();
+  renderNotifList();
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{ renderNotifBadge(); renderNotifList(); });
+
+/* ============================================================
+   COLOR THEMES
+============================================================ */
+const THEMES = {
+  blue:   { label:'Blue (Default)', navy:'#0c1220', navy2:'#141c30', blue:'#2563eb', blueDark:'#1d4ed8', green:'#16794f', greenDark:'#126140', tint:'#e6eefc' },
+  green:  { label:'Emerald',        navy:'#0c1a16', navy2:'#132420', blue:'#0f9d58', blueDark:'#0b7a44', green:'#166534', greenDark:'#14532d', tint:'#dcfce7' },
+  purple: { label:'Royal Purple',   navy:'#160c22', navy2:'#20142f', blue:'#7c3aed', blueDark:'#6d28d9', green:'#16794f', greenDark:'#126140', tint:'#f0e6fc' },
+  crimson:{ label:'Crimson',        navy:'#1f0c10', navy2:'#2a1418', blue:'#dc2626', blueDark:'#b91c1c', green:'#16794f', greenDark:'#126140', tint:'#fce6e6' },
+  teal:   { label:'Teal',           navy:'#08191c', navy2:'#0f2529', blue:'#0d9488', blueDark:'#0f766e', green:'#166534', greenDark:'#14532d', tint:'#dbf5f2' },
+  slate:  { label:'Slate Dark',     navy:'#0b0e14', navy2:'#141922', blue:'#475569', blueDark:'#334155', green:'#16794f', greenDark:'#126140', tint:'#e2e8f0' },
+};
+const THEME_KEY = 'sarvikha_admin_theme_v1';
+const CUSTOM_THEME_KEY = 'sarvikha_admin_custom_theme_v1';
+const DEFAULT_CUSTOM_THEME = {
+  topbar: '#2563eb',
+  sidebar: '#0c1220',
+  main: '#f2f4f8'
+};
+
+function loadCustomTheme(){
+  try{
+    const raw = localStorage.getItem(CUSTOM_THEME_KEY);
+    if(!raw) return {...DEFAULT_CUSTOM_THEME};
+    const parsed = JSON.parse(raw);
+    return {
+      topbar: parsed.topbar || DEFAULT_CUSTOM_THEME.topbar,
+      sidebar: parsed.sidebar || DEFAULT_CUSTOM_THEME.sidebar,
+      main: parsed.main || DEFAULT_CUSTOM_THEME.main
+    };
+  }catch(e){
+    console.warn('Could not load custom theme settings', e);
+    return {...DEFAULT_CUSTOM_THEME};
+  }
+}
+
+function saveCustomTheme(custom){
+  localStorage.setItem(CUSTOM_THEME_KEY, JSON.stringify(custom));
+}
+
+function applyCustomTheme(colors){
+  const root = document.documentElement.style;
+  const c = colors || loadCustomTheme();
+  root.setProperty('--topbar-bg', c.topbar);
+  root.setProperty('--sidebar-bg', c.sidebar);
+  root.setProperty('--main-bg', c.main);
+  const topbarInput = document.getElementById('topbarColorPicker');
+  const sidebarInput = document.getElementById('sidebarColorPicker');
+  const mainInput = document.getElementById('mainPageColorPicker');
+  if(topbarInput) topbarInput.value = c.topbar;
+  if(sidebarInput) sidebarInput.value = c.sidebar;
+  if(mainInput) mainInput.value = c.main;
+}
+
+function saveCustomThemeFromControls(){
+  const custom = {
+    topbar: document.getElementById('topbarColorPicker')?.value || DEFAULT_CUSTOM_THEME.topbar,
+    sidebar: document.getElementById('sidebarColorPicker')?.value || DEFAULT_CUSTOM_THEME.sidebar,
+    main: document.getElementById('mainPageColorPicker')?.value || DEFAULT_CUSTOM_THEME.main
+  };
+  saveCustomTheme(custom);
+  applyCustomTheme(custom);
+  if(document.getElementById('app') && document.getElementById('app').style.display === 'block'){
+    addNotification('Custom theme saved');
+  }
+}
+
+function resetCustomTheme(){
+  saveCustomTheme({...DEFAULT_CUSTOM_THEME});
+  applyCustomTheme({...DEFAULT_CUSTOM_THEME});
+  if(document.getElementById('app') && document.getElementById('app').style.display === 'block'){
+    addNotification('Custom theme reset');
+  }
+}
+
+function applyTheme(name){
+  const t = THEMES[name] || THEMES.blue;
+  const root = document.documentElement.style;
+  root.setProperty('--navy', t.navy);
+  root.setProperty('--navy-2', t.navy2);
+  root.setProperty('--blue', t.blue);
+  root.setProperty('--blue-dark', t.blueDark);
+  root.setProperty('--green', t.green);
+  root.setProperty('--green-dark', t.greenDark);
+  root.setProperty('--blue-tint', t.tint);
+  const custom = loadCustomTheme();
+  root.setProperty('--topbar-bg', custom.topbar);
+  root.setProperty('--sidebar-bg', custom.sidebar);
+  root.setProperty('--main-bg', custom.main);
+  localStorage.setItem(THEME_KEY, name);
+  renderThemeSwatches(name);
+  applyCustomTheme(custom);
+  if(document.getElementById('app') && document.getElementById('app').style.display === 'block'){
+    addNotification(`Color theme was changed to "${t.label}"`);
+  }
+}
+
+function renderThemeSwatches(activeName){
+  const grid = document.getElementById('themeSwatchGrid');
+  if(!grid) return;
+  grid.innerHTML = Object.keys(THEMES).map(key=>{
+    const t = THEMES[key];
+    const active = key===activeName ? 'active' : '';
+    return `
+      <div class="theme-swatch ${active}" onclick="applyTheme('${key}')">
+        <div class="dot-row">
+          <span class="dot" style="background:${t.navy}"></span>
+          <span class="dot" style="background:${t.blue}"></span>
+          <span class="dot" style="background:${t.green}"></span>
+        </div>
+        <div class="swatch-label">${t.label}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleThemeMenu(){
+  document.getElementById('notifMenu').classList.remove('show');
+  document.getElementById('fontSizeMenu').classList.remove('show');
+  document.getElementById('themeMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e){
+  const themeMenu = document.getElementById('themeMenu');
+  const notifMenu = document.getElementById('notifMenu');
+  const fontSizeMenu = document.getElementById('fontSizeMenu');
+  const searchResults = document.getElementById('searchResults');
+  if(themeMenu && !themeMenu.contains(e.target) && !e.target.closest('[onclick="toggleThemeMenu()"]')){
+    themeMenu.classList.remove('show');
+  }
+  if(notifMenu && !notifMenu.contains(e.target) && !e.target.closest('[onclick="toggleNotifMenu()"]')){
+    notifMenu.classList.remove('show');
+  }
+  if(fontSizeMenu && !fontSizeMenu.contains(e.target) && !e.target.closest('[onclick="toggleFontMenu()"]')){
+    fontSizeMenu.classList.remove('show');
+  }
+  if(searchResults && !searchResults.contains(e.target) && !e.target.closest('.topbar-search-wrap')){
+    searchResults.classList.remove('show');
+  }
+});
+
+(function initTheme(){
+  const saved = localStorage.getItem(THEME_KEY) || 'blue';
+  document.addEventListener('DOMContentLoaded', ()=>applyTheme(saved));
+})();
+
+/* ============================================================
+   FONT SIZE CONTROL
+============================================================ */
+const FONT_SIZE_KEY = 'sarvikha_admin_fontsize_v1';
+const FONT_PRESETS = [
+  {label:'Small', value:85},
+  {label:'Medium', value:100},
+  {label:'Large', value:115},
+  {label:'X-Large', value:130},
+];
+let fontSizePct = 100;
+
+function loadFontSize(){
+  const saved = Number(localStorage.getItem(FONT_SIZE_KEY));
+  fontSizePct = (saved && saved >= 70 && saved <= 160) ? saved : 100;
+}
+function applyFontSize(){
+  // Scale only the admin dashboard shell so the login screen remains fixed.
+  const app = document.getElementById('app');
+  if(app){
+    app.style.zoom = fontSizePct/100;
+    app.style.fontSize = fontSizePct + '%';
+  }
+  localStorage.setItem(FONT_SIZE_KEY, fontSizePct);
+  const label = document.getElementById('fsCurrentLabel');
+  if(label) label.textContent = fontSizePct + '%';
+  renderFontPresets();
+}
+function renderFontPresets(){
+  const grid = document.getElementById('fsPresetGrid');
+  if(!grid) return;
+  grid.innerHTML = FONT_PRESETS.map(p=>`
+    <div class="fs-preset ${p.value===fontSizePct?'active':''}" onclick="setFontSize(${p.value})">${p.label}</div>
+  `).join('');
+}
+function setFontSize(pct){
+  fontSizePct = pct;
+  applyFontSize();
+  if(document.getElementById('app') && document.getElementById('app').style.display === 'block'){
+    addNotification(`Font size was set to ${pct}%`);
+  }
+}
+function adjustFontSize(delta){
+  let next = fontSizePct + delta;
+  next = Math.max(70, Math.min(160, next));
+  setFontSize(next);
+}
+function toggleFontMenu(){
+  document.getElementById('themeMenu').classList.remove('show');
+  document.getElementById('notifMenu').classList.remove('show');
+  document.getElementById('fontSizeMenu').classList.toggle('show');
+}
+loadFontSize();
+document.addEventListener('DOMContentLoaded', applyFontSize);
+
+/* ============================================================
+   GLOBAL SEARCH
+============================================================ */
+function highlightMatch(text, query){
+  const str = String(text == null ? '' : text);
+  if(!query) return esc(str);
+  const idx = str.toLowerCase().indexOf(query.toLowerCase());
+  if(idx === -1) return esc(str);
+  return esc(str.slice(0, idx)) + '<mark class="sr-hl">' + esc(str.slice(idx, idx+query.length)) + '</mark>' + esc(str.slice(idx+query.length));
+}
+
+function onSearchInput(){
+  const q = document.getElementById('globalSearchInput').value.trim();
+  if(q.length === 0){
+    document.getElementById('searchResults').classList.remove('show');
+    return;
+  }
+  renderSearchResults(q);
+}
+
+function runGlobalSearch(e){
+  if(e && e.preventDefault) e.preventDefault();
+  const q = document.getElementById('globalSearchInput').value.trim();
+  if(!q){ toast('Type something to search for'); return false; }
+  renderSearchResults(q);
+  return false;
+}
+
+function searchGlobalData(q){
+  const query = q.toLowerCase();
+  const results = { categories:[], events:[], participants:[], wishlist:[], wishUsers:[] };
+
+  categories.forEach(c=>{
+    if(c.name.toLowerCase().includes(query) || (c.description||'').toLowerCase().includes(query)){
+      results.categories.push(c);
+    }
+  });
+  events.forEach(ev=>{
+    if(ev.title.toLowerCase().includes(query) ||
+       (ev.location||'').toLowerCase().includes(query) ||
+       (ev.description||'').toLowerCase().includes(query) ||
+       categoryName(ev.categoryId).toLowerCase().includes(query)){
+      results.events.push(ev);
+    }
+  });
+  participants.forEach(p=>{
+    if(p.user.toLowerCase().includes(query) ||
+       p.status.toLowerCase().includes(query) ||
+       eventTitle(p.eventId).toLowerCase().includes(query)){
+      results.participants.push(p);
+    }
+  });
+  wishlist.forEach(w=>{
+    if(w.eventName.toLowerCase().includes(query) || (w.description||'').toLowerCase().includes(query)){
+      results.wishlist.push(w);
+    }
+  });
+  wishUsers.forEach(u=>{
+    if(u.user.toLowerCase().includes(query) || wishName(u.wishId).toLowerCase().includes(query)){
+      results.wishUsers.push(u);
+    }
+  });
+  return results;
+}
+
+function renderSearchResults(q){
+  const results = searchGlobalData(q);
+  const total = results.categories.length + results.events.length + results.participants.length +
+                results.wishlist.length + results.wishUsers.length;
+  const box = document.getElementById('searchResults');
+
+  if(total === 0){
+    box.innerHTML = `<div class="sr-meta">Search results for "${esc(q)}"</div><div class="sr-empty">No matches found. Try a different keyword.</div>`;
+    box.classList.add('show');
+    return;
+  }
+
+  let html = `<div class="sr-meta">${total} result${total===1?'':'s'} for "${esc(q)}"</div>`;
+
+  if(results.categories.length){
+    html += `<div class="sr-group-label">Categories</div>`;
+    html += results.categories.map(c=>`
+      <div class="sr-item" onclick="goToSearchResult('categoryList', ${c.id})">
+        <div class="sr-title">${highlightMatch(c.name, q)}</div>
+        <div class="sr-sub">${highlightMatch(c.description||'No description', q)}</div>
+      </div>`).join('');
+  }
+  if(results.events.length){
+    html += `<div class="sr-group-label">Events</div>`;
+    html += results.events.map(ev=>`
+      <div class="sr-item" onclick="goToSearchResult('eventList', ${ev.id})">
+        <div class="sr-title">${highlightMatch(ev.title, q)}</div>
+        <div class="sr-sub">${esc(categoryName(ev.categoryId))} &middot; ${esc(ev.date||'No date')} &middot; ${highlightMatch(ev.location||'No location', q)}</div>
+      </div>`).join('');
+  }
+  if(results.participants.length){
+    html += `<div class="sr-group-label">Participants</div>`;
+    html += results.participants.map(p=>`
+      <div class="sr-item" onclick="goToSearchResult('joinEventList', ${p.id})">
+        <div class="sr-title">${highlightMatch(p.user, q)}</div>
+        <div class="sr-sub">${esc(eventTitle(p.eventId))} &middot; ${esc(p.status)}</div>
+      </div>`).join('');
+  }
+  if(results.wishlist.length){
+    html += `<div class="sr-group-label">Wish List</div>`;
+    html += results.wishlist.map(w=>`
+      <div class="sr-item" onclick="goToSearchResult('eventWishList', ${w.id})">
+        <div class="sr-title">${highlightMatch(w.eventName, q)}</div>
+        <div class="sr-sub">${highlightMatch(w.description||'No description', q)}</div>
+      </div>`).join('');
+  }
+  if(results.wishUsers.length){
+    html += `<div class="sr-group-label">Interested Wish Users</div>`;
+    html += results.wishUsers.map(u=>`
+      <div class="sr-item" onclick="goToSearchResult('addEventWishUser', ${u.id})">
+        <div class="sr-title">${highlightMatch(u.user, q)}</div>
+        <div class="sr-sub">Interested in: ${esc(wishName(u.wishId))}</div>
+      </div>`).join('');
+  }
+
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+function goToSearchResult(viewKey, recordId){
+  document.getElementById('searchResults').classList.remove('show');
+  navigate(viewKey);
+  setTimeout(()=>{
+    const row = document.querySelector(`[data-record-id="${viewKey}-${recordId}"]`);
+    if(row){
+      row.scrollIntoView({behavior:'smooth', block:'center'});
+      row.style.transition = 'background-color .3s';
+      row.style.backgroundColor = '#fff3b0';
+      setTimeout(()=>{ row.style.backgroundColor = ''; }, 1600);
+    }
+  }, 50);
+}
+
+/* ============================================================
+   NAV CONFIG
+============================================================ */
+const NAV = [
+  {key:'dashboard', label:'Dashboard', icon:'&#9673;'},
+  {key:'eventCategory', label:'Event Category', icon:'&#128193;'},
+  {key:'createCategory', label:'Create Category', icon:'&#9998;'},
+  {key:'categoryList', label:'Category List', icon:'&#9776;'},
+  {key:'events', label:'Events', icon:'&#128197;'},
+  {key:'createEvent', label:'Create Event', icon:'&#10133;'},
+  {key:'eventList', label:'Event List', icon:'&#9638;'},
+  {key:'addEventMember', label:'Add Event Member', icon:'&#128100;'},
+  {key:'joinEventList', label:'Join Event List', icon:'&#128101;'},
+  {key:'eventWishList', label:'Event Wish List', icon:'&#9825;'},
+  {key:'addEventWishUser', label:'Add Event Wish User', icon:'&#128100;'},
+  {key:'completeEventList', label:'Complete Event List', icon:'&#9989;'},
+  {key:'tickets', label:'Tickets', icon:'&#128229;'},
+  {key:'budget', label:'Budget Tracking', icon:'&#128176;'},
+];
+
+const navListEl = document.getElementById('navList');
+NAV.forEach(item=>{
+  const div = document.createElement('div');
+  div.className = 'nav-item';
+  div.id = 'nav-'+item.key;
+  div.innerHTML = `<span class="nav-icon">${item.icon}</span><span>${item.label}</span>`;
+  div.onclick = ()=>navigate(item.key);
+  navListEl.appendChild(div);
+});
+
+function setActiveNav(key){
+  NAV.forEach(i=>document.getElementById('nav-'+i.key).classList.remove('active'));
+  const el = document.getElementById('nav-'+key);
+  if(el) el.classList.add('active');
+}
+
+function setHeader(title){
+  document.getElementById('pageTitle').textContent = title;
+  document.getElementById('pageCrumb').textContent = title;
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function categoryName(id){
+  const c = categories.find(c=>c.id===id);
+  return c ? c.name : '—';
+}
+function eventTitle(id){
+  const e = events.find(e=>e.id===id);
+  return e ? e.title : '—';
+}
+function wishName(id){
+  const w = wishlist.find(w=>w.id===id);
+  return w ? w.eventName : '—';
+}
+function statusBadge(status){
+  const map = {Registered:'badge-registered', Attended:'badge-attended', Pending:'badge-pending'};
+  return `<span class="badge ${map[status]||'badge-registered'}">${status}</span>`;
+}
+function esc(str){
+  return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ============================================================
+   MODAL (generic edit)
+============================================================ */
+function openModal(title, fieldsHtml, onSave){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = fieldsHtml;
+  document.getElementById('modalOverlay').classList.add('show');
+  const btn = document.getElementById('modalSaveBtn');
+  btn.onclick = ()=>{ if(onSave()) closeModal(); };
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+/* ============================================================
+   ROUTER
+============================================================ */
+function navigate(key){
+  saveData();
+  setActiveNav(key);
+  const view = VIEWS[key];
+  if(!view){ setHeader('Dashboard'); document.getElementById('content').innerHTML='<p>Not found</p>'; return; }
+  setHeader(view.title);
+  document.getElementById('content').innerHTML = view.render();
+  if(key === 'tickets') generateTicketQRCodes();
+}
+
+/* ============================================================
+   VIEWS
+============================================================ */
+const VIEWS = {
+  dashboard:{ title:'Dashboard', render: renderDashboard },
+  eventCategory:{ title:'Event Category', render: renderEventCategoryOverview },
+  createCategory:{ title:'Create Category', render: renderCreateCategory },
+  categoryList:{ title:'Category List', render: renderCategoryList },
+  events:{ title:'Events', render: renderEventsOverview },
+  createEvent:{ title:'Create Event', render: renderCreateEvent },
+  eventList:{ title:'Event List', render: renderEventList },
+  addEventMember:{ title:'Add Event Member', render: renderAddEventMember },
+  joinEventList:{ title:'Join Event List', render: renderJoinEventList },
+  eventWishList:{ title:'Event Wish List', render: renderEventWishList },
+  addEventWishUser:{ title:'Add Event Wish User', render: renderAddEventWishUser },
+  completeEventList:{ title:'Complete Event List', render: renderCompleteEventList },
+  tickets:{ title:'Tickets', render: renderTickets },
+  budget:{ title:'Budget Tracking', render: renderBudget },
+};
+
+/* ---------- DASHBOARD ---------- */
+function buildTicketPayload(p){
+  const event = events.find(ev => ev.id === p.eventId) || null;
+  return JSON.stringify({
+    ticketType: 'SARVIKHA_EVENT_TICKET',
+    ticketId: `SARV-${p.id}-${p.eventId}-${p.status.toLowerCase()}`,
+    participantId: p.id,
+    participantName: p.user,
+    participantStatus: p.status,
+    eventId: event ? event.id : null,
+    eventName: event ? event.title : 'Unknown Event',
+    eventDate: event ? (event.date || 'No date') : 'No date',
+    location: event ? (event.location || 'No location') : 'No location'
+  });
+}
+
+function renderTickets(){
+  const registeredParticipants = participants.filter(p => String(p.status).toLowerCase() === 'registered'
+    || String(p.status).toLowerCase() === 'attended');
+
+  if(!registeredParticipants.length){
+    return `<div class="card">
+      <div class="card-head"><h3>Tickets</h3></div>
+      <div class="ticket-empty">No registered users are available for ticket generation.</div>
+    </div>`;
+  }
+
+  const ticketRows = registeredParticipants.map(p => {
+    const ev = events.find(e => e.id === p.eventId);
+    const payload = `SARV-${p.id}-${p.eventId}`;
+    const attendance = String(p.status).toLowerCase() === 'attended' ? 'Present' : 'Not Attended';
+    const attendanceClass = attendance === 'Present' ? 'present' : 'not-attended';
+    
+
+    return `<div class="ticket-row">
+      <div class="ticket-cell event-name">${esc(ev ? ev.title : '—')}</div>
+      <div class="ticket-cell name">${esc(p.user)}</div>
+      <div class="ticket-cell ticket-status-wrap"><span class="ticket-status-badge">Active</span></div>
+      <div class="ticket-cell ticket-status-wrap"><span class="ticket-attendance-badge ${attendanceClass}">${attendance}</span></div>
+      <div class="ticket-cell ticket-qr-cell"><canvas class="ticket-qr-canvas" data-ticket-payload="${esc(payload)}"></canvas></div>
+      <div class="ticket-cell ticket-download-cell"><button class="btn-download" onclick="downloadTicketQR(this)"><span aria-hidden="true">⇩</span>Download</button></div>
+    </div>`;
+  }).join('');
+
+  return `<div class="card">
+      <div class="card-head">
+        <h3>Tickets</h3>
+        <button class="btn btn-green" onclick="navigate('joinEventList')">Add Registered User</button>
+      </div>
+      <div class="ticket-board">
+        <div class="ticket-board-head">
+          <div class="ticket-head-cell">Event</div>
+          <div class="ticket-head-cell">Name</div>
+          <div class="ticket-head-cell">Event Status</div>
+          <div class="ticket-head-cell">Attendance</div>
+          <div class="ticket-head-cell">Ticket</div>
+        </div>
+        ${ticketRows}
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   SELF-CONTAINED QR GENERATOR
+   Version 1-L QR codes only. Ticket payloads are intentionally
+   kept short (SARV-participantId-eventId), so no external QR
+   library or internet connection is required.
+============================================================ */
+function qrGfMul(a,b){
+  let r=0;
+  while(b){
+    if(b & 1) r ^= a;
+    b >>= 1;
+    a = (a & 0x80) ? ((a << 1) ^ 0x11d) : (a << 1);
+    a &= 255;
+  }
+  return r & 255;
+}
+
+function qrMakeVersion1L(text){
+  // Version 1-L supports up to 17 bytes in byte mode.
+  const bytes = [];
+  for(let i=0;i<text.length;i++){
+    const c=text.charCodeAt(i);
+    if(c < 0x80) bytes.push(c);
+    else if(c < 0x800){ bytes.push(0xc0|(c>>6),0x80|(c&63)); }
+    else { bytes.push(0xe0|(c>>12),0x80|((c>>6)&63),0x80|(c&63)); }
+  }
+  if(bytes.length > 17) throw new Error('Ticket QR payload is too long.');
+
+  const bits=[];
+  const addBits=(value,count)=>{
+    for(let i=count-1;i>=0;i--) bits.push((value>>i)&1);
+  };
+  addBits(0b0100,4);              // byte mode
+  addBits(bytes.length,8);        // character count
+  bytes.forEach(b=>addBits(b,8));
+
+  const remaining=152-bits.length;
+  addBits(0,Math.min(4,remaining));
+  while(bits.length%8) bits.push(0);
+
+  const data=[];
+  for(let i=0;i<bits.length;i+=8){
+    let v=0;
+    for(let j=0;j<8;j++) v=(v<<1)|bits[i+j];
+    data.push(v);
+  }
+  const pads=[0xec,0x11];
+  let pi=0;
+  while(data.length<19) data.push(pads[pi++%2]);
+
+  // Reed-Solomon: 7 error-correction codewords for version 1-L.
+  let gen=[1];
+  for(let i=0;i<7;i++){
+    const next=new Array(gen.length+1).fill(0);
+    const a=1<<i;
+    for(let j=0;j<gen.length;j++){
+      next[j]^=gen[j];
+      next[j+1]^=qrGfMul(gen[j],a);
+    }
+    gen=next;
+  }
+  const ecc=new Array(7).fill(0);
+  data.forEach(value=>{
+    const factor=value ^ ecc[0];
+    ecc.shift();
+    ecc.push(0);
+    for(let j=0;j<7;j++) ecc[j]^=qrGfMul(gen[j+1],factor);
+  });
+  const codewords=data.concat(ecc);
+
+  const size=21;
+  const m=Array.from({length:size},()=>Array(size).fill(null));
+  const finder=(r,c)=>{
+    for(let dr=-1;dr<=7;dr++) for(let dc=-1;dc<=7;dc++){
+      const rr=r+dr, cc=c+dc;
+      if(rr<0||rr>=size||cc<0||cc>=size) continue;
+      if(dr>=0&&dr<=6&&dc>=0&&dc<=6){
+        m[rr][cc]=(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4));
+      }else m[rr][cc]=false;
+    }
+  };
+  finder(0,0); finder(0,14); finder(14,0);
+
+  // Timing patterns.
+  for(let i=8;i<13;i++){
+    m[6][i]=(i%2===0);
+    m[i][6]=(i%2===0);
+  }
+
+  // Fixed dark module.
+  m[13][8]=true;
+
+  // Format information: error correction L + mask 0.
+  const format=0x77c4;
+  for(let i=0;i<15;i++){
+    const bit=((format>>i)&1)!==0;
+    if(i<6) m[i][8]=bit;
+    else if(i<8) m[i+1][8]=bit;
+    else m[size-15+i][8]=bit;
+
+    if(i<8) m[8][size-i-1]=bit;
+    else if(i<9) m[8][15-i]=bit;
+    else m[8][15-i-1]=bit;
+  }
+
+  // Place data bits using the standard QR zig-zag pattern.
+  const dataBits=[];
+  codewords.forEach(v=>{ for(let i=7;i>=0;i--) dataBits.push((v>>i)&1); });
+  let bitIndex=0, col=20, upward=true;
+  while(col>0){
+    if(col===6) col--;
+    const rows=upward ? [...Array(size).keys()].reverse() : [...Array(size).keys()];
+    for(const row of rows){
+      for(const c of [col,col-1]){
+        if(m[row][c]!==null) continue;
+        let bit=dataBits[bitIndex++];
+        // Mask pattern 0.
+        if((row+c)%2===0) bit ^= 1;
+        m[row][c]=!!bit;
+      }
+    }
+    upward=!upward;
+    col-=2;
+  }
+  if(bitIndex!==208) throw new Error('QR data placement failed.');
+  return m;
+}
+
+function drawTicketQR(canvas,text){
+  const matrix=qrMakeVersion1L(text);
+  const quiet=4, modules=21, scale=6;
+  const size=(modules+quiet*2)*scale;
+  canvas.width=size;
+  canvas.height=size;
+  canvas.style.width='150px';
+  canvas.style.height='150px';
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,size,size);
+  ctx.fillStyle='#0f172a';
+  for(let r=0;r<modules;r++){
+    for(let c=0;c<modules;c++){
+      if(matrix[r][c]) ctx.fillRect((c+quiet)*scale,(r+quiet)*scale,scale,scale);
+    }
+  }
+}
+
+function generateTicketQRCodes(){
+  document.querySelectorAll('[data-ticket-payload]').forEach(canvas=>{
+    const payload=canvas.getAttribute('data-ticket-payload') || '';
+    if(!payload) return;
+    try{
+      drawTicketQR(canvas,payload);
+    }catch(error){
+      console.error('QR generation error:',error);
+      const wrapper=document.createElement('div');
+      wrapper.className='qr-fallback';
+      wrapper.textContent='Unable to generate QR';
+      canvas.replaceWith(wrapper);
+    }
+  });
+}
+
+function downloadTicketQR(button){
+  const row = button.closest('.ticket-row');
+  if(!row) return;
+  const canvas = row.querySelector('canvas.ticket-qr-canvas');
+  if(!canvas){ toast('QR code is not available yet'); return; }
+
+  try {
+    const eventName = row.querySelector('.event-name')?.textContent.trim() || 'event';
+    const userName = row.querySelector('.name')?.textContent.trim() || 'participant';
+    const safeName = `${eventName}-${userName}`.replace(/[^a-z0-9_-]+/gi, '_');
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `Sarvikha-Ticket-${safeName}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch(error) {
+    console.error('Could not download QR:', error);
+    toast('Could not download QR code');
+  }
+}
+
+function renderDashboard(){
+  const rows = participants.map(p=>`
+    <tr>
+      <td>${p.id}</td>
+      <td>${esc(p.user)}</td>
+      <td>${esc(eventTitle(p.eventId))}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-blue" onclick="editParticipant(${p.id})">Edit</button>
+        <button class="btn btn-outline-red" onclick="deleteParticipant(${p.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="5">No participants yet.</td></tr>`;
+
+  return `
+    <div class="stat-row">
+      <div class="stat-card"><div class="num">${categories.length}</div><div class="lbl">Categories</div></div>
+      <div class="stat-card"><div class="num">${events.length}</div><div class="lbl">Events</div></div>
+      <div class="stat-card"><div class="num">${participants.length}</div><div class="lbl">Participants</div></div>
+      <div class="stat-card"><div class="num">${wishlist.length}</div><div class="lbl">Wishlist Items</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h3>Event Participants</h3>
+        <button class="btn btn-green" onclick="navigate('createEvent')">Create Event</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>User</th><th>Event</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function editParticipant(id){
+  const p = participants.find(p=>p.id===id);
+  if(!p) return;
+  const eventOptions = events.map(e=>`<option value="${e.id}" ${e.id===p.eventId?'selected':''}>${esc(e.title)}</option>`).join('');
+  openModal('Edit Participant', `
+    <div class="field"><label>User</label><input id="m_user" value="${esc(p.user)}"></div>
+    <div class="field"><label>Event</label><select id="m_event">${eventOptions}</select></div>
+    <div class="field"><label>Status</label>
+      <select id="m_status">
+        <option ${p.status==='Registered'?'selected':''}>Registered</option>
+        <option ${p.status==='Attended'?'selected':''}>Attended</option>
+        <option ${p.status==='Pending'?'selected':''}>Pending</option>
+      </select>
+    </div>
+  `, ()=>{
+    const user = document.getElementById('m_user').value.trim();
+    if(!user){ toast('User name is required'); return false; }
+    p.user = user;
+    p.eventId = Number(document.getElementById('m_event').value);
+    p.status = document.getElementById('m_status').value;
+    toast('Participant updated');
+    addNotification(`Participant "${user}" was updated`);
+    navigate(currentKey());
+    return true;
+  });
+}
+function deleteParticipant(id){
+  if(!confirm('Delete this participant record?')) return;
+  const p = participants.find(p=>p.id===id);
+  participants = participants.filter(p=>p.id!==id);
+  toast('Participant deleted');
+  addNotification(`Participant "${p ? p.user : id}" was deleted`);
+  navigate(currentKey());
+}
+
+function currentKey(){
+  const active = document.querySelector('.nav-item.active');
+  return active ? active.id.replace('nav-','') : 'dashboard';
+}
+
+/* ---------- EVENT CATEGORY (overview) ---------- */
+function renderEventCategoryOverview(){
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Event Category</h3>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline-blue" onclick="navigate('createCategory')">Create Category</button>
+          <button class="btn btn-blue" onclick="navigate('categoryList')">View Category List</button>
+        </div>
+      </div>
+      <div style="padding:24px;">
+        <p style="color:var(--muted);margin-top:0;"></p>
+        <table>
+          <thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Events</th></tr></thead>
+          <tbody>
+          ${categories.map(c=>`
+            <tr>
+              <td>${c.id}</td><td>${esc(c.name)}</td><td>${esc(c.description||'—')}</td>
+              <td>${events.filter(e=>e.categoryId===c.id).length}</td>
+            </tr>`).join('') || `<tr class="empty-row"><td colspan="4">No categories yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- CREATE CATEGORY ---------- */
+function renderCreateCategory(){
+  return `
+    <div class="card">
+      <div class="card-head"><h3>Create Category</h3></div>
+      <form class="form-grid single" onsubmit="return submitCreateCategory(event)">
+        <div class="field"><label>Category Name</label><input id="cat_name" required placeholder="e.g. Workshops"></div>
+        <div class="field"><label>Description</label><textarea id="cat_desc" rows="3" placeholder="Short description"></textarea></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-green">Save Category</button>
+          <button type="button" class="btn" style="background:#e5e7eb;color:#111" onclick="document.getElementById('cat_name').value='';document.getElementById('cat_desc').value='';">Clear</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+function submitCreateCategory(e){
+  e.preventDefault();
+  const name = document.getElementById('cat_name').value.trim();
+  const desc = document.getElementById('cat_desc').value.trim();
+  if(!name){ toast('Category name is required'); return false; }
+  categories.push({id: nextId.category++, name, description: desc});
+  toast('Category created');
+  addNotification(`Category "${name}" was created`);
+  navigate('categoryList');
+  return false;
+}
+
+/* ---------- CATEGORY LIST ---------- */
+function renderCategoryList(){
+  const rows = categories.map(c=>`
+    <tr data-record-id="categoryList-${c.id}">
+      <td>${c.id}</td>
+      <td>${esc(c.name)}</td>
+      <td>${esc(c.description||'—')}</td>
+      <td>${events.filter(e=>e.categoryId===c.id).length}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-blue" onclick="editCategory(${c.id})">Edit</button>
+        <button class="btn btn-outline-red" onclick="deleteCategory(${c.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="5">No categories yet. Click "Create Category" to add one.</td></tr>`;
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Category List</h3>
+        <button class="btn btn-green" onclick="navigate('createCategory')">Create Category</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Events</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+function editCategory(id){
+  const c = categories.find(c=>c.id===id);
+  if(!c) return;
+  openModal('Edit Category', `
+    <div class="field"><label>Name</label><input id="m_name" value="${esc(c.name)}"></div>
+    <div class="field"><label>Description</label><textarea id="m_desc" rows="3">${esc(c.description||'')}</textarea></div>
+  `, ()=>{
+    const name = document.getElementById('m_name').value.trim();
+    if(!name){ toast('Name is required'); return false; }
+    c.name = name;
+    c.description = document.getElementById('m_desc').value.trim();
+    toast('Category updated');
+    addNotification(`Category "${name}" was updated`);
+    navigate('categoryList');
+    return true;
+  });
+}
+function deleteCategory(id){
+  const inUse = events.some(e=>e.categoryId===id);
+  if(inUse && !confirm('Events use this category. Delete anyway? (Their category will show as "—")')) return;
+  if(!inUse && !confirm('Delete this category?')) return;
+  const cat = categories.find(c=>c.id===id);
+  categories = categories.filter(c=>c.id!==id);
+  addNotification(`Category "${cat ? cat.name : id}" was deleted`);
+  toast('Category deleted');
+  navigate('categoryList');
+}
+
+/* ---------- EVENTS (overview) ---------- */
+function renderEventsOverview(){
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Events</h3>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline-blue" onclick="navigate('createEvent')">Create Event</button>
+          <button class="btn btn-blue" onclick="navigate('eventList')">View Event List</button>
+        </div>
+      </div>
+      <div style="padding:24px;">
+        <p style="color:var(--muted);margin-top:0;">Currently <b>${events.length}</b> events across <b>${categories.length}</b> categories.</p>
+        <table>
+          <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Date</th><th>Location</th></tr></thead>
+          <tbody>
+          ${events.map(e=>`
+            <tr>
+              <td>${e.id}</td><td>${esc(e.title)}</td><td>${esc(categoryName(e.categoryId))}</td>
+              <td>${e.date||'—'}</td><td>${esc(e.location||'—')}</td>
+            </tr>`).join('') || `<tr class="empty-row"><td colspan="5">No events yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- CREATE EVENT ---------- */
+function renderCreateEvent(){
+  const catOptions = categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')
+    || '<option value="">No categories — create one first</option>';
+  return `
+    <div class="card">
+      <div class="card-head"><h3>Create Event</h3></div>
+      <form class="form-grid" onsubmit="return submitCreateEvent(event)">
+        <div class="field"><label>Event Title</label><input id="ev_title" required placeholder="e.g. Tech Fest"></div>
+        <div class="field"><label>Category</label><select id="ev_cat">${catOptions}</select></div>
+        <div class="field"><label>Date</label><input id="ev_date" type="date"></div>
+        <div class="field"><label>Location</label><input id="ev_loc" placeholder="e.g. Main Auditorium"></div>
+        <div class="field full"><label>Description</label><textarea id="ev_desc" rows="3" placeholder="Short description"></textarea></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-green">Save Event</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+function submitCreateEvent(e){
+  e.preventDefault();
+  const title = document.getElementById('ev_title').value.trim();
+  if(!title){ toast('Event title is required'); return false; }
+  const catVal = document.getElementById('ev_cat').value;
+  events.push({
+    id: nextId.event++,
+    title,
+    categoryId: catVal ? Number(catVal) : null,
+    date: document.getElementById('ev_date').value,
+    location: document.getElementById('ev_loc').value.trim(),
+    description: document.getElementById('ev_desc').value.trim(),
+  });
+  toast('Event created');
+  addNotification(`Event "${title}" was created`);
+  navigate('eventList');
+  return false;
+}
+
+/* ---------- EVENT LIST ---------- */
+function renderEventList(){
+  const rows = events.map(e=>`
+    <tr data-record-id="eventList-${e.id}">
+      <td>${e.id}</td>
+      <td>${esc(e.title)}</td>
+      <td>${esc(categoryName(e.categoryId))}</td>
+      <td>${e.date||'—'}</td>
+      <td>${esc(e.location||'—')}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-blue" onclick="editEvent(${e.id})">Edit</button>
+        <button class="btn btn-outline-red" onclick="deleteEvent(${e.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="6">No events yet. Click "Create Event" to add one.</td></tr>`;
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Event List</h3>
+        <button class="btn btn-green" onclick="navigate('createEvent')">Create Event</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Date</th><th>Location</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+function editEvent(id){
+  const e = events.find(e=>e.id===id);
+  if(!e) return;
+  const catOptions = categories.map(c=>`<option value="${c.id}" ${c.id===e.categoryId?'selected':''}>${esc(c.name)}</option>`).join('');
+  openModal('Edit Event', `
+    <div class="field"><label>Title</label><input id="m_title" value="${esc(e.title)}"></div>
+    <div class="field"><label>Category</label><select id="m_cat">${catOptions}</select></div>
+    <div class="field"><label>Date</label><input id="m_date" type="date" value="${e.date||''}"></div>
+    <div class="field"><label>Location</label><input id="m_loc" value="${esc(e.location||'')}"></div>
+    <div class="field"><label>Description</label><textarea id="m_desc" rows="3">${esc(e.description||'')}</textarea></div>
+  `, ()=>{
+    const title = document.getElementById('m_title').value.trim();
+    if(!title){ toast('Title is required'); return false; }
+    e.title = title;
+    e.categoryId = Number(document.getElementById('m_cat').value);
+    e.date = document.getElementById('m_date').value;
+    e.location = document.getElementById('m_loc').value.trim();
+    e.description = document.getElementById('m_desc').value.trim();
+    toast('Event updated');
+    addNotification(`Event "${title}" was updated`);
+    navigate('eventList');
+    return true;
+  });
+}
+function deleteEvent(id){
+  const ev = events.find(e=>e.id===id);
+  if(!confirm('Delete this event? Related participant records will also be removed.')) return;
+  events = events.filter(e=>e.id!==id);
+  participants = participants.filter(p=>p.eventId!==id);
+  toast('Event deleted');
+  addNotification(`Event "${ev ? ev.title : id}" was deleted`);
+  navigate('eventList');
+}
+
+/* ---------- ADD EVENT MEMBER ---------- */
+function renderAddEventMember(){
+  const eventOptions = events.map(e=>`<option value="${e.id}">${esc(e.title)}</option>`).join('')
+    || '<option value="">No events — create one first</option>';
+  return `
+    <div class="card">
+      <div class="card-head"><h3>Add Event Member</h3></div>
+      <form class="form-grid" onsubmit="return submitAddMember(event)">
+        <div class="field"><label>User Name</label><input id="am_user" required placeholder="e.g. Priya"></div>
+        <div class="field"><label>Event</label><select id="am_event">${eventOptions}</select></div>
+        <div class="field"><label>Status</label>
+          <select id="am_status">
+            <option>Registered</option>
+            <option>Attended</option>
+            <option>Pending</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-green">Add Member</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+function submitAddMember(e){
+  e.preventDefault();
+  const user = document.getElementById('am_user').value.trim();
+  if(!user){ toast('User name is required'); return false; }
+  const evVal = document.getElementById('am_event').value;
+  if(!evVal){ toast('Please create an event first'); return false; }
+  participants.push({
+    id: nextId.participant++,
+    user,
+    eventId: Number(evVal),
+    status: document.getElementById('am_status').value,
+  });
+  saveData();
+  toast('Member added');
+  addNotification(`"${user}" was added as an event member`);
+  navigate('joinEventList');
+  return false;
+}
+
+/* ---------- JOIN EVENT LIST ---------- */
+function renderJoinEventList(){
+  const rows = participants.map(p=>`
+    <tr data-record-id="JoinEventList-${p.id}">
+      <td>${p.id}</td>
+      <td>${esc(p.user)}</td>
+      <td>${esc(eventTitle(p.eventId))}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-blue" onclick="editParticipant(${p.id})">Edit</button>
+        <button class="btn btn-outline-red" onclick="deleteParticipant(${p.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="5">No members yet. Click "Add Event Member" to add one.</td></tr>`;
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Event Member List</h3>
+        <button class="btn btn-green" onclick="navigate('addEventMember')">Add Event Member</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>User</th><th>Event</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ---------- EVENT WISH LIST ---------- */
+function renderEventWishList(){
+  const rows = wishlist.map(w=>{
+    const interested = wishUsers.filter(u=>u.wishId===w.id);
+    return `
+    <tr data-record-id="eventWishList-${w.id}">
+      <td>${w.id}</td>
+      <td>${esc(w.eventName)}</td>
+      <td>${esc(w.description||'—')}</td>
+      <td>${interested.length ? interested.map(u=>esc(u.user)).join(', ') : '<span style="color:var(--muted);">None yet</span>'}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-blue" onclick="editWish(${w.id})">Edit</button>
+        <button class="btn btn-outline-red" onclick="deleteWish(${w.id})">Delete</button>
+      </td>
+    </tr>
+  `;}).join('') || `<tr class="empty-row"><td colspan="5">No wishlist items yet.</td></tr>`;
+
+  return `
+    <div class="card">
+      <div class="card-head">
+        <h3>Event Wish List</h3>
+        <button class="btn btn-green" onclick="showWishForm()">+ New Wish Item</button>
+      </div>
+      <div id="wishFormHolder"></div>
+      <table>
+        <thead><tr><th>ID</th><th>Event Name</th><th>Description</th><th>Interested Users</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+function showWishForm(){
+  document.getElementById('wishFormHolder').innerHTML = `
+    <form class="form-grid" style="border-bottom:1px solid var(--border);padding-bottom:20px;" onsubmit="return submitWish(event)">
+      <div class="field"><label>Event Name</label><input id="w_name" required placeholder="e.g. Robotics Expo"></div>
+      <div class="field"><label>Description</label><input id="w_desc" placeholder="Short description"></div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-green">Save Wish Item</button>
+        <button type="button" class="btn" style="background:#e5e7eb;color:#111" onclick="document.getElementById('wishFormHolder').innerHTML=''">Cancel</button>
+      </div>
+    </form>
+  `;
+}
+function submitWish(e){
+  e.preventDefault();
+  const name = document.getElementById('w_name').value.trim();
+  if(!name){ toast('Event name is required'); return false; }
+  wishlist.push({id: nextId.wish++, eventName: name, description: document.getElementById('w_desc').value.trim()});
+  toast('Wishlist item added');
+  addNotification(`Wishlist item "${name}" was added`);
+  navigate('eventWishList');
+  return false;
+}
+function editWish(id){
+  const w = wishlist.find(w=>w.id===id);
+  if(!w) return;
+  openModal('Edit Wish Item', `
+    <div class="field"><label>Event Name</label><input id="m_wname" value="${esc(w.eventName)}"></div>
+    <div class="field"><label>Description</label><input id="m_wdesc" value="${esc(w.description||'')}"></div>
+  `, ()=>{
+    const name = document.getElementById('m_wname').value.trim();
+    if(!name){ toast('Event name is required'); return false; }
+    w.eventName = name;
+    w.description = document.getElementById('m_wdesc').value.trim();
+    toast('Wish item updated');
+    addNotification(`Wishlist item "${name}" was updated`);
+    navigate('eventWishList');
+    return true;
+  });
+}
+function deleteWish(id){
+  if(!confirm('Delete this wishlist item and its interested users?')) return;
+  const w = wishlist.find(w=>w.id===id);
+  addNotification(`Wishlist item "${w ? w.eventName : id}" was deleted`);
+  wishlist = wishlist.filter(w=>w.id!==id);
+  wishUsers = wishUsers.filter(u=>u.wishId!==id);
+  toast('Wish item deleted');
+  navigate('eventWishList');
+}
+
+/* ---------- ADD EVENT WISH USER ---------- */
+function renderAddEventWishUser(){
+  const wishOptions = wishlist.map(w=>`<option value="${w.id}">${esc(w.eventName)}</option>`).join('')
+    || '<option value="">No wish items — create one first</option>';
+  const rows = wishUsers.map(u=>`
+    <tr data-record-id="addEventWishUser-${u.id}">
+      <td>${u.id}</td>
+      <td>${esc(u.user)}</td>
+      <td>${esc(wishName(u.wishId))}</td>
+      <td class="actions-cell">
+        <button class="btn btn-outline-red" onclick="deleteWishUser(${u.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="4">No interested users yet.</td></tr>`;
+
+  return `
+    <div class="card">
+      <div class="card-head"><h3>Add Event Wish User</h3></div>
+      <form class="form-grid" onsubmit="return submitWishUser(event)">
+        <div class="field"><label>User Name</label><input id="wu_user" required placeholder="e.g. Divya"></div>
+        <div class="field"><label>Wishlist Event</label><select id="wu_wish">${wishOptions}</select></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-green">Add User</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Interested Users</h3></div>
+      <table>
+        <thead><tr><th>ID</th><th>User</th><th>Wishlist Event</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+function submitWishUser(e){
+  e.preventDefault();
+  const user = document.getElementById('wu_user').value.trim();
+  if(!user){ toast('User name is required'); return false; }
+  const wVal = document.getElementById('wu_wish').value;
+  if(!wVal){ toast('Please create a wishlist item first'); return false; }
+  wishUsers.push({id: nextId.wishUser++, user, wishId: Number(wVal)});
+  toast('User added to wishlist');
+  addNotification(`"${user}" was added as an interested wishlist user`);
+  navigate('addEventWishUser');
+  return false;
+}
+function deleteWishUser(id){
+  if(!confirm('Remove this user from the wishlist?')) return;
+  const wu = wishUsers.find(u=>u.id===id);
+  wishUsers = wishUsers.filter(u=>u.id!==id);
+  toast('Removed');
+  addNotification(`"${wu ? wu.user : id}" was removed from a wishlist`);
+  navigate('addEventWishUser');
+}
+
+/* ---------- COMPLETE EVENT LIST ---------- */
+function renderCompleteEventList(){
+  const rows = events.map(e=>{
+    const evParticipants = participants.filter(p=>p.eventId===e.id);
+    const attended = evParticipants.filter(p=>p.status==='Attended').length;
+    return `
+    <tr>
+      <td>${e.id}</td>
+      <td>${esc(e.title)}</td>
+      <td>${esc(categoryName(e.categoryId))}</td>
+      <td>${e.date||'—'}</td>
+      <td>${esc(e.location||'—')}</td>
+      <td>${evParticipants.length}</td>
+      <td>${attended}</td>
+    </tr>
+  `;}).join('') || `<tr class="empty-row"><td colspan="7">No events to display.</td></tr>`;
+
+  return `
+    <div class="card">
+      <div class="card-head"><h3>Complete Event List</h3></div>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Title</th><th>Category</th><th>Date</th><th>Location</th><th>Registered</th><th>Attended</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ---------- BUDGET TRACKING ---------- */
+function budgetSpent(bid){ return expenses.filter(e=>e.budgetId===bid).reduce((s,x)=>s+Number(x.amount||0),0); }
+
+function renderBudget(){
+  const totalBudget = budgets.reduce((s,b)=>s+Number(b.amount||0),0);
+  const totalExpenses = expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+  const remaining = totalBudget - totalExpenses;
+  const rows = budgets.map(b=>{
+    const id = b.id != null ? b.id : (b.budgetId || '—');
+    const spent = budgetSpent(b.id);
+    return `
+      <tr data-record-id="budget-${id}">
+        <td>${id}</td>
+        <td>${esc(b.title)}</td>
+        <td>${Number(b.amount).toFixed(2)}</td>
+        <td>${Number(spent).toFixed(2)}</td>
+        <td>${Number(b.amount - spent).toFixed(2)}</td>
+        <td class="actions-cell">
+          <button class="btn btn-outline-blue" onclick="viewBudget(${id})">View</button>
+          <button class="btn btn-blue" onclick="editBudget(${id})">Edit</button>
+          <button class="btn btn-outline-red" onclick="deleteBudget(${id})">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join('') || `<tr class="empty-row"><td colspan="6">No budgets yet. Create one to start tracking expenses.</td></tr>`;
+
+  return `
+    <div class="stat-row">
+      <div class="stat-card"><div class="num">${Number(totalBudget).toFixed(2)}</div><div class="lbl">Total Budget</div></div>
+      <div class="stat-card"><div class="num">${Number(totalExpenses).toFixed(2)}</div><div class="lbl">Total Expenses</div></div>
+      <div class="stat-card"><div class="num">${Number(remaining).toFixed(2)}</div><div class="lbl">Remaining</div></div>
+      <div class="stat-card"><div class="num">${budgets.length}</div><div class="lbl">Budgets</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Budgets</h3>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-green" onclick="showCreateBudget()">Create Budget</button>
+          <button class="btn btn-blue" onclick="showAddExpense()">Add Expense</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Title</th><th>Total Budget</th><th>Amount Spent</th><th>Remaining Amount</th><th>Actions</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function showCreateBudget(b){
+  const isEdit = !!b;
+  if(isEdit && (b.id == null || b.id === '' || Number.isNaN(Number(b.id)))){
+    b.id = nextId.budget++;
+  }
+  openModal(isEdit ? 'Edit Budget' : 'Create Budget', `
+    <div class="field"><label>Title</label><input id="b_title" value="${b ? esc(b.title) : ''}" required></div>
+    <div class="field"><label>Total Budget</label><input id="b_amount" type="number" min="0" value="${b ? Number(b.amount) : 0}" required></div>
+    <div class="field"><label>Notes</label><input id="b_notes" value="${b ? esc(b.notes||'') : ''}"></div>
+  `, ()=>{
+    const title = document.getElementById('b_title').value.trim();
+    if(!title){ toast('Title is required'); return false; }
+    const amt = Number(document.getElementById('b_amount').value) || 0;
+    const notes = document.getElementById('b_notes').value.trim();
+    if(isEdit){
+      b.title = title; b.amount = amt; b.notes = notes;
+      toast('Budget updated'); addNotification(`Budget "${title}" updated`);
+    } else {
+      budgets.push({id: nextId.budget++, title, amount: amt, notes});
+      toast('Budget created'); addNotification(`Budget "${title}" created`);
+    }
+    saveData();
+    navigate('budget');
+    return true;
+  });
+}
+function showCreateBudgetWrapper(){ showCreateBudget(); }
+function showAddExpense(){
+  const options = budgets.map(b=>`<option value="${b.id}">${esc(b.title)}</option>`).join('') || '<option value="">No budgets</option>';
+  openModal('Add Expense', `
+    <div class="field"><label>Budget</label><select id="exp_budget">${options}</select></div>
+    <div class="field"><label>Title</label><input id="exp_title" required></div>
+    <div class="field"><label>Amount</label><input id="exp_amount" type="number" min="0" value="0" required></div>
+    <div class="field"><label>Date</label><input id="exp_date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Note</label><input id="exp_note"></div>
+  `, ()=>{
+    const bid = Number(document.getElementById('exp_budget').value);
+    if(!bid){ toast('Select a budget first'); return false; }
+    const title = document.getElementById('exp_title').value.trim(); if(!title){ toast('Title required'); return false; }
+    const amt = Number(document.getElementById('exp_amount').value) || 0;
+    const date = document.getElementById('exp_date').value || '';
+    const note = document.getElementById('exp_note').value.trim();
+    expenses.push({id: nextId.expense++, budgetId: bid, title, amount: amt, date, note});
+    saveData(); toast('Expense added'); addNotification(`Expense "${title}" added to budget`);
+    navigate('budget');
+    return true;
+  });
+}
+function viewBudget(id){
+  const b = budgets.find(x=>x.id===id); if(!b) return;
+  const bExpenses = expenses.filter(e=>e.budgetId===id);
+  const rows = bExpenses.map(e=>`
+    <tr>
+      <td>${e.id}</td>
+      <td>${esc(e.title)}</td>
+      <td>${Number(e.amount).toFixed(2)}</td>
+      <td>${esc(e.date||'—')}</td>
+      <td>${esc(e.note||'')}</td>
+      <td class="actions-cell"><button class="btn btn-outline-red" onclick="deleteExpense(${e.id})">Delete</button></td>
+    </tr>
+  `).join('') || `<tr class="empty-row"><td colspan="6">No expenses for this budget yet.</td></tr>`;
+
+  const spent = budgetSpent(b.id);
+  const remaining = Number(b.amount) - Number(spent);
+  openModal(`Budget: ${esc(b.title)}`, `
+    <div style="padding:6px 0 0 0;">
+      <div style="margin-bottom:10px">
+        Total Budget: <b>${Number(b.amount).toFixed(2)}</b> &nbsp; Spent: <b>${Number(spent).toFixed(2)}</b> &nbsp; Remaining: <b>${Number(remaining).toFixed(2)}</b>
+      </div>
+      <table><thead><tr><th>ID</th><th>Title</th><th>Amount</th><th>Date</th><th>Note</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>
+  `, ()=>{ return true; });
+}
+function editBudget(id){ const b = budgets.find(x=>x.id===id); if(!b) return; showCreateBudget(b); }
+function deleteBudget(id){ if(!confirm('Delete this budget and its expenses?')) return; const b = budgets.find(x=>x.id===id); budgets = budgets.filter(x=>x.id!==id); expenses = expenses.filter(e=>e.budgetId!==id); saveData(); toast('Budget deleted'); addNotification(`Budget "${b ? b.title : id}" deleted`); navigate('budget'); }
+function deleteExpense(id){ if(!confirm('Delete this expense?')) return; const e = expenses.find(x=>x.id===id); expenses = expenses.filter(x=>x.id!==id); saveData(); toast('Expense deleted'); addNotification(`Expense "${e ? e.title : id}" deleted`); navigate('budget'); }
+
+</script>
+</body>
+</html>

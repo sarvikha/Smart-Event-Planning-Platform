@@ -1,0 +1,169 @@
+{% extends 'event/base.html' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">{{ event.title }}</h1>
+        <p class="text-muted mb-0">Budget monitoring • Expense tracking • Sponsorship management</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'event:event_list' %}">Back to events</a>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Budget Summary</h5>
+                <div class="display-6 mb-2">{{ event.budget }}</div>
+                <div class="small text-muted">Remaining: {{ event.remaining_budget }}</div>
+                <div class="small text-muted">Expenses: {{ event.total_expense }}</div>
+                <div class="small text-muted">Sponsor receipts: {{ event.total_sponsorship }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Expenses Logged</h5>
+                <div class="display-6 mb-2">{{ event.total_expense }}</div>
+                <div class="small text-muted">{{ expenses|length }} expense records</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Sponsorship Contributions</h5>
+                <div class="display-6 mb-2">{{ event.total_sponsorship }}</div>
+                <div class="small text-muted">{{ sponsorships|length }} sponsor agreements</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Update budget</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="budget">
+                    {{ budget_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save budget</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Add expense</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="expense">
+                    {{ expense_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Add expense</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Add sponsor</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="sponsor">
+                    {{ sponsor_form.as_p }}
+                    <div class="mb-3">
+                        <label class="form-label" for="id_amount">Amount</label>
+                        <input class="form-control" id="id_amount" name="amount" min="0" step="0.01" type="number">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="id_sponsorship_type">Sponsorship type</label>
+                        <select class="form-select" id="id_sponsorship_type" name="sponsorship_type">
+                            <option value="Title">Title</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Bronze">Bronze</option>
+                            <option value="Support" selected>Support</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="id_agreement_date">Agreement date</label>
+                        <input class="form-control" id="id_agreement_date" name="agreement_date" type="date">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="id_notes">Sponsorship notes</label>
+                        <textarea class="form-control" id="id_notes" name="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create sponsor</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Record sponsorship</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="sponsorship">
+                    {{ sponsorship_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save sponsorship</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Expenses</h4>
+                {% if expenses %}
+                <ul class="list-group list-group-flush">
+                    {% for expense in expenses %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <div class="fw-semibold">{{ expense.title }}</div>
+                            <div class="small text-muted">{{ expense.category }} • {{ expense.expense_date }}</div>
+                        </div>
+                        <div>{{ expense.amount }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="text-muted">No expenses registered yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h4 class="card-title">Sponsors</h4>
+                {% if sponsorships %}
+                <ul class="list-group list-group-flush">
+                    {% for sponsorship in sponsorships %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <div class="fw-semibold">{{ sponsorship.sponsor.name }}</div>
+                            <div class="small text-muted">{{ sponsorship.sponsorship_type }} • {{ sponsorship.agreement_date }}</div>
+                        </div>
+                        <div>{{ sponsorship.amount }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="text-muted">No sponsors linked yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

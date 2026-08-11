@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Category Delete - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; }
+        .content { padding: 30px; text-align: center; }
+        .warning { background: #fff3cd; padding: 20px; border-radius: 5px; margin-bottom: 30px; color: #856404; border: 1px solid #ffeaa7; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; text-align: left; }
+        select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; }
+        select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102, 126, 234, 0.2); }
+        .button-group { display: flex; gap: 10px; justify-content: center; }
+        button { padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-delete:hover { background: #c82333; }
+        .btn-cancel { background: #6c757d; color: white; }
+        .btn-cancel:hover { background: #5a6268; }
+        a { color: #667eea; text-decoration: none; padding: 10px 20px; display: inline-block; margin-top: 20px; }
+        .footer { padding: 20px 30px; background: #f8f9fa; text-align: center; border-top: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗑️ Delete Event Category</h1>
+        </header>
+        
+        <div class="content">
+            <div class="warning">
+                <strong>⚠️ Warning!</strong> Deleting a category cannot be undone. All events under this category may be affected.
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label for="category">Select Category to Delete</label>
+                    <select id="category" required>
+                        <option>Choose a category...</option>
+                        <option>Technical</option>
+                        <option>Social</option>
+                        <option>Sports</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-delete">Delete Category</button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='event_category.html'">Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <a href="../dashboard.html">🏠 Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Event User List - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        table th { background: #f8f9fa; padding: 15px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
+        table td { padding: 12px 15px; border-bottom: 1px solid #ddd; }
+        table tr:hover { background: #f8f9fa; }
+        .action-links { display: flex; gap: 8px; }
+        .action-links a { color: white; padding: 5px 10px; font-size: 0.8em; text-decoration: none; border-radius: 3px; display: inline-block; }
+        .view-btn { background: #667eea; }
+        .edit-btn { background: #28a745; }
+        .delete-btn { background: #dc3545; }
+        .action-links a:hover { opacity: 0.9; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <strong>Event Members</strong>
+        </div>
+        
+        <header>
+            <h1>👥 Event Members List</h1>
+            <div class="btn-group">
+                <a href="add_event_member.html">➕ Add Member</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>U001</td>
+                        <td>John Doe</td>
+                        <td>john@example.com</td>
+                        <td>Participant</td>
+                        <td>Annual Conference 2024</td>
+                        <td>Active</td>
+                        <td>
+                            <div class="action-links">
+                                <a href="#" class="view-btn">View</a>
+                                <a href="remove_event_member.html" class="delete-btn">Remove</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>U002</td>
+                        <td>Jane Smith</td>
+                        <td>jane@example.com</td>
+                        <td>Organizer</td>
+                        <td>Annual Conference 2024</td>
+                        <td>Active</td>
+                        <td>
+                            <div class="action-links">
+                                <a href="#" class="view-btn">View</a>
+                                <a href="remove_event_member.html" class="delete-btn">Remove</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="add_event_member.html">➕ Add New Member</a>
+                <a href="event_list.html" style="margin-left: 10px;">📋 View Events</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

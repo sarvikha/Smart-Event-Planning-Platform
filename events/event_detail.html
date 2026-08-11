@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Detail - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.6em; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        .detail-section { margin-bottom: 30px; }
+        .detail-section h2 { color: #667eea; margin-bottom: 15px; font-size: 1.3em; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .detail-item { display: flex; margin-bottom: 10px; }
+        .detail-label { font-weight: 600; color: #333; min-width: 150px; }
+        .detail-value { color: #666; }
+        .actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .btn-edit, .btn-delete { padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        .btn-edit { background: #28a745; color: white; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-edit:hover { background: #218838; }
+        .btn-delete:hover { background: #c82333; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <a href="event_list.html">Events</a> / <strong>Event Details</strong>
+        </div>
+        
+        <header>
+            <h1>📊 Event Details</h1>
+            <div class="btn-group">
+                <a href="event_list.html">← Back to Events</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="detail-section">
+                <h2>Basic Information</h2>
+                <div class="detail-item">
+                    <span class="detail-label">Event ID:</span>
+                    <span class="detail-value">E001</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Event Name:</span>
+                    <span class="detail-value">Annual Conference 2024</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Category:</span>
+                    <span class="detail-value">Technical</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value">Active</span>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h2>Event Schedule</h2>
+                <div class="detail-item">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value">2024-12-15</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value">10:00 AM</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Location:</span>
+                    <span class="detail-value">Bangalore</span>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h2>Description</h2>
+                <p>Annual conference for team building and knowledge sharing</p>
+            </div>
+            
+            <div class="detail-section">
+                <h2>Event Statistics</h2>
+                <div class="detail-item">
+                    <span class="detail-label">Total Registered:</span>
+                    <span class="detail-value">250 participants</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Confirmed Attendees:</span>
+                    <span class="detail-value">200</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Created Date:</span>
+                    <span class="detail-value">2024-11-01</span>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a href="edit_event.html" class="btn-edit">✏️ Edit Event</a>
+                <a href="delete_event.html" class="btn-delete">🗑️ Delete Event</a>
+                <a href="complete_event_user_list.html" style="background: #667eea; color: white;">👥 View Members</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="update_event_status.html">🔄 Update Status</a>
+                <a href="event_list.html" style="margin-left: 10px;">📋 View All Events</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

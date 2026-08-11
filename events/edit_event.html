@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - Event Registration Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .breadcrumb { background: #f8f9fa; padding: 12px 20px; font-size: 0.9em; border-bottom: 1px solid #ddd; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin: 0 5px; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.5em; }
+        .btn-group { display: flex; gap: 10px; }
+        a { padding: 10px 20px; border-radius: 5px; text-decoration: none; background: white; color: #667eea; transition: all 0.3s ease; }
+        a:hover { background: #f0f0f0; }
+        .content { padding: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; font-family: inherit; }
+        textarea { resize: vertical; min-height: 100px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102, 126, 234, 0.2); }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .btn-cancel { background: #6c757d; }
+        .btn-cancel:hover { background: #5a6268; }
+        .footer { padding: 20px 30px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .footer a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            📍 <a href="../dashboard.html">Dashboard</a> / <a href="event_list.html">Events</a> / <a href="event_detail.html">Details</a> / <strong>Edit Event</strong>
+        </div>
+        
+        <header>
+            <h1>✏️ Edit Event</h1>
+            <div class="btn-group">
+                <a href="event_detail.html">← Back</a>
+                <a href="../dashboard.html">🏠 Dashboard</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <form onsubmit="handleUpdateEvent(event)">
+                <div class="form-group">
+                    <label for="name">Event Name *</label>
+                    <input type="text" id="name" required placeholder="Enter event name" value="Annual Conference 2024">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" placeholder="Enter event description...">Annual conference for team building and knowledge sharing</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Event Date *</label>
+                    <input type="date" id="date" required value="2024-12-15">
+                </div>
+                
+                <div class="form-group">
+                    <label for="time">Event Time *</label>
+                    <input type="time" id="time" required value="10:00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location *</label>
+                    <input type="text" id="location" required placeholder="Enter event location" value="Bangalore">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" required>
+                        <option selected>Technical</option>
+                        <option>Social</option>
+                        <option>Sports</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit">✅ Update Event</button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='event_detail.html'">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <div>
+                <a href="event_detail.html">📊 View Details</a>
+                <a href="delete_event.html" style="margin-left: 10px;">🗑️ Delete Event</a>
+            </div>
+            <div>
+                <a href="../dashboard.html">🏠 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function handleUpdateEvent(event) {
+            event.preventDefault();
+            alert('✅ Event updated successfully!');
+            window.location.href = 'event_detail.html';
+        }
+    </script>
+</body>
+</html>

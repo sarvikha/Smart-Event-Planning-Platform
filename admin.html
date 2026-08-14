@@ -36,7 +36,7 @@
   *{box-sizing:border-box;}
   body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
   /* ---------- LOGIN ---------- */
-  #loginScreen{
+  #loginScreen{display:none !important;
     min-height:100vh;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(135deg,var(--navy) 0%, #1a2340 45%, var(--blue-dark) 100%);
   }
@@ -281,24 +281,210 @@
     .form-grid{grid-template-columns:1fr;}
     .stat-row{grid-template-columns:1fr 1fr;}
   }
+
+  /* ---------- USER PANEL ---------- */
+  #userApp{display:none;min-height:100vh;background:var(--bg);}
+  .user-topbar{
+    height:64px;background:linear-gradient(90deg,var(--blue) 0%,#3b82f6 100%);
+    color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+    box-shadow:0 3px 12px rgba(0,0,0,.12);position:sticky;top:0;z-index:50;
+  }
+  .user-brand{font-size:20px;font-weight:700;}
+  .user-top-actions{display:flex;align-items:center;gap:10px;}
+  .user-top-actions span{font-size:14px;}
+  .user-shell{max-width:1200px;margin:0 auto;padding:28px 22px 50px;}
+  .user-welcome{
+    background:linear-gradient(135deg,var(--navy),#253b70);color:#fff;border-radius:16px;
+    padding:28px;margin-bottom:24px;box-shadow:0 10px 30px rgba(12,18,32,.16);
+  }
+  .user-welcome h2{margin:0 0 8px;font-size:28px;}
+  .user-welcome p{margin:0;color:#dbe4ff;}
+  .user-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .user-event-card{
+    background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+    box-shadow:0 4px 14px rgba(20,30,60,.06);display:flex;flex-direction:column;
+  }
+  .user-event-banner{height:9px;background:var(--blue);}
+  .user-event-body{padding:20px;display:flex;flex-direction:column;flex:1;}
+  .user-event-body h3{margin:0 0 8px;font-size:20px;}
+  .user-event-meta{color:var(--muted);font-size:13px;line-height:1.8;margin-bottom:12px;}
+  .user-event-desc{font-size:14px;color:#374151;line-height:1.55;flex:1;margin-bottom:18px;}
+  .user-event-actions{display:flex;gap:8px;align-items:center;}
+  .user-badge{display:inline-block;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+  .user-badge.registered{background:#e9f7ef;color:#0e7a45;}
+  .user-badge.full{background:#fef2f2;color:#b91c1c;}
+  .user-empty{background:#fff;border:1px solid var(--border);border-radius:14px;padding:40px;text-align:center;color:var(--muted);}
+  .user-section{margin-top:28px;}
+  .user-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .user-section-head h3{margin:0;font-size:21px;}
+  .user-table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:auto;}
+  .user-table-wrap table{min-width:680px;}
+  .user-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+  .user-stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;}
+  .user-stat .n{font-size:25px;font-weight:700;}
+  .user-stat .l{font-size:12px;color:var(--muted);margin-top:4px;}
+  .auth-card{background:#fff;width:620px;max-width:94vw;border-radius:18px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.28);}
+  .auth-brand{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .auth-logo{width:46px;height:46px;border-radius:12px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;}
+  .auth-brand h1{font-size:21px;margin:0;}
+  .auth-brand p{font-size:12px;color:var(--muted);margin:4px 0 0;}
+  .role-tabs{display:grid;grid-template-columns:1fr 1fr;background:#eef2f7;border-radius:10px;padding:4px;margin-bottom:22px;}
+  .role-tab{border:0;background:transparent;padding:10px;border-radius:8px;font-weight:700;cursor:pointer;color:#64748b;}
+  .role-tab.active{background:#fff;color:var(--blue);box-shadow:0 2px 6px rgba(0,0,0,.08);}
+  .auth-card h2{font-size:20px;margin:0 0 4px;}
+  .auth-sub{font-size:13px;color:var(--muted);margin:0 0 18px;}
+  .auth-card label{font-size:12.5px;font-weight:600;color:#374151;display:block;margin:0 0 6px;}
+  .auth-card input{width:100%;padding:10px 12px;margin-bottom:14px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#f8fafc;}
+  .auth-card input:focus{outline:none;border-color:var(--blue);background:#fff;}
+  .auth-primary{width:100%;padding:11px;border:0;border-radius:8px;background:var(--blue);color:#fff;font-size:14px;font-weight:700;cursor:pointer;}
+  .auth-primary:hover{background:var(--blue-dark);}
+  .auth-error{display:none;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:8px;padding:9px 11px;font-size:12.5px;margin-bottom:14px;}
+  .auth-error.show{display:block;}
+  .auth-switch{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+  .auth-switch-btn{border:0;background:none;padding:8px 4px 11px;margin-right:15px;color:var(--muted);font-weight:700;cursor:pointer;border-bottom:2px solid transparent;}
+  .auth-switch-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+  .signup-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;}
+  .signup-grid>div{min-width:0;}
+  @media(max-width:800px){
+    .user-grid{grid-template-columns:1fr;}
+    .user-stat-row{grid-template-columns:1fr;}
+  }
+  @media(max-width:650px){
+    .auth-card{padding:22px;}
+    .signup-grid{grid-template-columns:1fr;}
+    .user-topbar{padding:0 16px;}
+    .user-shell{padding:20px 14px 40px;}
+  }
+
 </style>
 </head>
 <body>
 
-<!-- ================= LOGIN SCREEN ================= -->
-<div id="loginScreen">
-  <div class="login-card">
-    <h1>Admin Panel</h1>
-    <p class="sub">Sign in to manage Sarvikha events</p>
-    <div id="loginError">Invalid username or password.</div>
-    <form id="loginForm">
-      <label>Username</label>
-      <input id="loginUser" autocomplete="username" placeholder="admin" required>
-      <label>Password</label>
-      <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" required>
-      <button type="submit">Log In</button>
-    </form>
-    <div class="login-hint">Demo credentials — username: <b>admin</b> &nbsp;|&nbsp; password: <b>admin123</b></div>
+<!-- ================= AUTH SCREEN ================= -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="auth-logo">E</div>
+      <div>
+        <h1>Event Management Platform</h1>
+        <p>Manage events or register as a participant</p>
+      </div>
+    </div>
+
+    <div class="role-tabs">
+      <button type="button" class="role-tab active" id="adminRoleTab" onclick="showAuthRole('admin')">Admin</button>
+      <button type="button" class="role-tab" id="userRoleTab" onclick="showAuthRole('user')">User</button>
+    </div>
+
+    <!-- ADMIN LOGIN -->
+    <div id="adminAuthPanel">
+      <h2>Admin Login</h2>
+      <p class="auth-sub">Sign in to manage events, participants, tickets and budgets.</p>
+      <div id="loginError" class="auth-error">Invalid username or password.</div>
+      <form id="loginForm">
+        <label>Username</label>
+        <input id="loginUser" autocomplete="username" placeholder="admin" required>
+        <label>Password</label>
+        <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" required>
+        <button type="submit" class="auth-primary">Log In as Admin</button>
+      </form>
+      <div class="login-hint">Demo admin credentials — username: <b>admin</b> | password: <b>admin123</b></div>
+    </div>
+
+    <!-- USER LOGIN / SIGNUP -->
+    <div id="userAuthPanel" style="display:none;">
+      <div class="auth-switch">
+        <button type="button" id="userLoginTab" class="auth-switch-btn active" onclick="showUserAuth('login')">Login</button>
+        <button type="button" id="userSignupTab" class="auth-switch-btn" onclick="showUserAuth('signup')">Create Account</button>
+      </div>
+
+      <div id="userLoginPanel">
+        <h2>User Login</h2>
+        <p class="auth-sub">Login to view events and register for them.</p>
+        <div id="userLoginError" class="auth-error"></div>
+        <form id="userLoginForm">
+          <label>Email or Username</label>
+          <input id="userLoginIdentity" autocomplete="username" required>
+          <label>Password</label>
+          <input id="userLoginPassword" type="password" autocomplete="current-password" required>
+          <button type="submit" class="auth-primary">Login</button>
+        </form>
+      </div>
+
+      <div id="userSignupPanel" style="display:none;">
+        <h2>Create User Account</h2>
+        <p class="auth-sub">Create an account to register for available events.</p>
+        <div id="userSignupError" class="auth-error"></div>
+        <form id="userSignupForm">
+          <div class="signup-grid">
+            <div>
+              <label>Full Name</label>
+              <input id="signupName" required>
+            </div>
+            <div>
+              <label>Username</label>
+              <input id="signupUsername" required>
+            </div>
+            <div>
+              <label>Email</label>
+              <input id="signupEmail" type="email" required>
+            </div>
+            <div>
+              <label>Phone Number</label>
+              <input id="signupPhone" type="tel" required>
+            </div>
+            <div>
+              <label>Password</label>
+              <input id="signupPassword" type="password" minlength="4" required>
+            </div>
+            <div>
+              <label>Confirm Password</label>
+              <input id="signupPassword2" type="password" minlength="4" required>
+            </div>
+          </div>
+          <button type="submit" class="auth-primary">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= USER PANEL ================= -->
+<div id="userApp">
+  <div class="user-topbar">
+    <div class="user-brand">Event Management Platform</div>
+    <div class="user-top-actions">
+      <span id="userHeaderName"></span>
+      <button class="btn" style="background:#fff;color:var(--blue);padding:7px 12px;" onclick="userLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="user-shell">
+    <div class="user-welcome">
+      <h2>Welcome, <span id="userWelcomeName">User</span>!</h2>
+      <p>Browse available events and register for the events you want to attend.</p>
+    </div>
+
+    <div class="user-stat-row">
+      <div class="user-stat"><div class="n" id="userAvailableCount">0</div><div class="l">Available Events</div></div>
+      <div class="user-stat"><div class="n" id="userRegisteredCount">0</div><div class="l">My Registrations</div></div>
+      <div class="user-stat"><div class="n" id="userTotalEventsCount">0</div><div class="l">Total Events</div></div>
+    </div>
+
+    <div class="user-section">
+      <div class="user-section-head">
+        <h3>Available Events</h3>
+        <button class="btn btn-blue" onclick="renderUserPanel()">Refresh</button>
+      </div>
+      <div id="userEventsGrid" class="user-grid"></div>
+    </div>
+
+    <div class="user-section">
+      <div class="user-section-head">
+        <h3>My Registrations</h3>
+      </div>
+      <div id="userRegistrations" class="user-table-wrap"></div>
+    </div>
   </div>
 </div>
 
@@ -641,7 +827,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
   const p = document.getElementById('loginPass').value;
   if(u === adminProfile.username && p === adminProfile.password){
     document.getElementById('loginError').style.display='none';
-    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('authScreen').style.display='none';
     document.getElementById('app').style.display='block';
     refreshAdminNameDisplay();
     navigate('dashboard');
@@ -653,7 +839,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
 function logout(){
   if(confirm('Log out of the admin panel?')){
     document.getElementById('app').style.display='none';
-    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('authScreen').style.display='flex';
     document.getElementById('loginUser').value='';
     document.getElementById('loginPass').value='';
   }
@@ -2123,6 +2309,356 @@ function viewBudget(id){
 function editBudget(id){ const b = budgets.find(x=>x.id===id); if(!b) return; showCreateBudget(b); }
 function deleteBudget(id){ if(!confirm('Delete this budget and its expenses?')) return; const b = budgets.find(x=>x.id===id); budgets = budgets.filter(x=>x.id!==id); expenses = expenses.filter(e=>e.budgetId!==id); saveData(); toast('Budget deleted'); addNotification(`Budget "${b ? b.title : id}" deleted`); navigate('budget'); }
 function deleteExpense(id){ if(!confirm('Delete this expense?')) return; const e = expenses.find(x=>x.id===id); expenses = expenses.filter(x=>x.id!==id); saveData(); toast('Expense deleted'); addNotification(`Expense "${e ? e.title : id}" deleted`); navigate('budget'); }
+
+
+/* ============================================================
+   USER ACCOUNTS / USER PANEL
+   Shares events and participant registrations with the admin panel.
+============================================================ */
+const USER_KEY = 'sarvikha_user_accounts_v1';
+const USER_SESSION_KEY = 'sarvikha_user_session_v1';
+
+let userAccounts = [];
+let currentUser = null;
+
+function loadUserAccounts(){
+  try{
+    const raw = localStorage.getItem(USER_KEY);
+    userAccounts = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    userAccounts = [];
+  }
+}
+function saveUserAccounts(){
+  localStorage.setItem(USER_KEY, JSON.stringify(userAccounts));
+}
+function loadUserSession(){
+  try{
+    const raw = localStorage.getItem(USER_SESSION_KEY);
+    currentUser = raw ? JSON.parse(raw) : null;
+  }catch(e){
+    currentUser = null;
+  }
+}
+function saveUserSession(){
+  if(currentUser) localStorage.setItem(USER_SESSION_KEY, JSON.stringify(currentUser));
+  else localStorage.removeItem(USER_SESSION_KEY);
+}
+
+loadUserAccounts();
+loadUserSession();
+
+function showAuthRole(role){
+  document.getElementById('adminRoleTab').classList.toggle('active', role === 'admin');
+  document.getElementById('userRoleTab').classList.toggle('active', role === 'user');
+  document.getElementById('adminAuthPanel').style.display = role === 'admin' ? 'block' : 'none';
+  document.getElementById('userAuthPanel').style.display = role === 'user' ? 'block' : 'none';
+  if(role === 'user') showUserAuth('login');
+}
+
+function showUserAuth(mode){
+  const login = mode === 'login';
+  document.getElementById('userLoginPanel').style.display = login ? 'block' : 'none';
+  document.getElementById('userSignupPanel').style.display = login ? 'none' : 'block';
+  document.getElementById('userLoginTab').classList.toggle('active', login);
+  document.getElementById('userSignupTab').classList.toggle('active', !login);
+  clearAuthError('userLoginError');
+  clearAuthError('userSignupError');
+}
+
+function showAuthError(id, message){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = message;
+  el.classList.add('show');
+}
+function clearAuthError(id){
+  const el = document.getElementById(id);
+  if(el){
+    el.textContent = '';
+    el.classList.remove('show');
+  }
+}
+
+document.getElementById('userSignupForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('signupName').value.trim();
+  const username = document.getElementById('signupUsername').value.trim();
+  const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const password2 = document.getElementById('signupPassword2').value;
+
+  clearAuthError('userSignupError');
+
+  if(!name || !username || !email || !phone || !password){
+    showAuthError('userSignupError','Please fill in all fields.');
+    return;
+  }
+  if(password.length < 4){
+    showAuthError('userSignupError','Password must be at least 4 characters.');
+    return;
+  }
+  if(password !== password2){
+    showAuthError('userSignupError','Passwords do not match.');
+    return;
+  }
+  if(userAccounts.some(u => u.username.toLowerCase() === username.toLowerCase())){
+    showAuthError('userSignupError','That username is already in use.');
+    return;
+  }
+  if(userAccounts.some(u => u.email.toLowerCase() === email)){
+    showAuthError('userSignupError','An account with that email already exists.');
+    return;
+  }
+
+  const newUser = {
+    id: 'U' + Date.now(),
+    name, username, email, phone, password,
+    createdAt: new Date().toISOString()
+  };
+
+  userAccounts.push(newUser);
+  saveUserAccounts();
+
+  document.getElementById('userSignupForm').reset();
+  showUserAuth('login');
+  document.getElementById('userLoginIdentity').value = username;
+  showAuthError('userLoginError','Account created successfully. You can now log in.');
+  document.getElementById('userLoginError').style.background = '#ecfdf5';
+  document.getElementById('userLoginError').style.color = '#166534';
+  document.getElementById('userLoginError').style.borderColor = '#bbf7d0';
+});
+
+document.getElementById('userLoginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const identity = document.getElementById('userLoginIdentity').value.trim().toLowerCase();
+  const password = document.getElementById('userLoginPassword').value;
+
+  clearAuthError('userLoginError');
+
+  const user = userAccounts.find(u =>
+    u.username.toLowerCase() === identity || u.email.toLowerCase() === identity
+  );
+
+  if(!user || user.password !== password){
+    showAuthError('userLoginError','Invalid user credentials.');
+    return;
+  }
+
+  currentUser = {
+    id:user.id, name:user.name, username:user.username,
+    email:user.email, phone:user.phone
+  };
+  saveUserSession();
+  openUserPanel();
+});
+
+function openUserPanel(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('userApp').style.display = 'block';
+  renderUserPanel();
+}
+
+function userLogout(){
+  currentUser = null;
+  saveUserSession();
+  document.getElementById('userApp').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+  showAuthRole('user');
+  showUserAuth('login');
+  document.getElementById('userLoginForm').reset();
+}
+
+function getUserRegistrations(){
+  if(!currentUser) return [];
+  return participants.filter(p =>
+    p.userAccountId === currentUser.id ||
+    (p.user === currentUser.username && !p.userAccountId)
+  );
+}
+
+function isUserRegistered(eventId){
+  return getUserRegistrations().some(p => Number(p.eventId) === Number(eventId));
+}
+
+function registerForEvent(eventId){
+  if(!currentUser){
+    toast('Please log in first');
+    return;
+  }
+
+  const event = events.find(e => Number(e.id) === Number(eventId));
+  if(!event){
+    alert('Event not found.');
+    return;
+  }
+
+  if(isUserRegistered(eventId)){
+    alert('You are already registered for this event.');
+    return;
+  }
+
+  const participant = {
+    id: nextId.participant++,
+    user: currentUser.username,
+    userAccountId: currentUser.id,
+    userName: currentUser.name,
+    email: currentUser.email,
+    eventId: Number(eventId),
+    status: 'Registered',
+    registeredAt: new Date().toISOString()
+  };
+
+  participants.push(participant);
+  saveData();
+  addNotification(`User "${currentUser.username}" registered for "${event.title}"`);
+  renderUserPanel();
+  alert(`Registration successful for "${event.title}".`);
+}
+
+function cancelUserRegistration(participantId){
+  if(!currentUser){
+    alert('Please log in again.');
+    return;
+  }
+
+  // Compare IDs as strings so localStorage/JSON number-vs-string
+  // differences cannot prevent the registration from being found.
+  const targetId = String(participantId);
+  const index = participants.findIndex(p => {
+    const sameId = String(p.id) === targetId;
+    const sameUser =
+      String(p.userAccountId || '') === String(currentUser.id || '') ||
+      (!p.userAccountId && String(p.user || '').toLowerCase() === String(currentUser.username || '').toLowerCase());
+    return sameId && sameUser;
+  });
+
+  if(index === -1){
+    alert('Registration could not be found.');
+    return;
+  }
+
+  const p = participants[index];
+
+  if(!confirm('Cancel this event registration?')) return;
+
+  const eventName = eventTitle(p.eventId);
+
+  // Remove the registration from the shared participant list.
+  participants.splice(index, 1);
+  saveData();
+
+  // Refresh the user panel immediately.
+  renderUserPanel();
+
+  // Keep admin data/notifications in sync.
+  if(typeof addNotification === 'function'){
+    addNotification(`User "${currentUser.username}" cancelled registration for "${eventName}"`);
+  }
+
+  if(typeof toast === 'function'){
+    toast('Registration cancelled successfully');
+  }
+}
+
+function renderUserPanel(){
+  if(!currentUser) return;
+
+  document.getElementById('userHeaderName').textContent = currentUser.name;
+  document.getElementById('userWelcomeName').textContent = currentUser.name;
+
+  const regs = getUserRegistrations();
+  const today = new Date().toISOString().slice(0,10);
+  const available = events.filter(e => !e.date || e.date >= today);
+
+  document.getElementById('userAvailableCount').textContent = available.length;
+  document.getElementById('userRegisteredCount').textContent = regs.length;
+  document.getElementById('userTotalEventsCount').textContent = events.length;
+
+  const grid = document.getElementById('userEventsGrid');
+
+  if(!available.length){
+    grid.innerHTML = `<div class="user-empty" style="grid-column:1/-1;">
+      <h3>No events available</h3>
+      <p>There are currently no upcoming events.</p>
+    </div>`;
+  } else {
+    grid.innerHTML = available.map(ev => {
+      const registered = isUserRegistered(ev.id);
+      return `
+        <div class="user-event-card">
+          <div class="user-event-banner"></div>
+          <div class="user-event-body">
+            <h3>${esc(ev.title)}</h3>
+            <div class="user-event-meta">
+              <div>📅 ${esc(ev.date || 'Date not specified')}</div>
+              <div>📍 ${esc(ev.location || 'Location not specified')}</div>
+              <div>📁 ${esc(categoryName(ev.categoryId))}</div>
+            </div>
+            <div class="user-event-desc">${esc(ev.description || 'No description available.')}</div>
+            <div class="user-event-actions">
+              ${registered
+                ? `<span class="user-badge registered">Registered</span>
+                   <button class="btn btn-outline-red" onclick="scrollToUserRegistrations()">View Registration</button>`
+                : `<button class="btn btn-blue" onclick="registerForEvent(${ev.id})">Register for Event</button>`}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const regBox = document.getElementById('userRegistrations');
+  if(!regs.length){
+    regBox.innerHTML = `<div class="user-empty">You have not registered for any events yet.</div>`;
+  } else {
+    regBox.innerHTML = `
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Date</th><th>Location</th><th>Status</th><th>Registered On</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          ${regs.map(p => {
+            const ev = events.find(e => Number(e.id) === Number(p.eventId));
+            return `
+              <tr>
+                <td><b>${esc(ev ? ev.title : 'Unknown Event')}</b></td>
+                <td>${esc(ev ? ev.date : '—')}</td>
+                <td>${esc(ev ? ev.location : '—')}</td>
+                <td>${statusBadge(p.status)}</td>
+                <td>${p.registeredAt ? new Date(p.registeredAt).toLocaleString() : '—'}</td>
+                <td>
+                  ${String(p.status).toLowerCase() === 'registered'
+                    ? `<button class="btn btn-outline-red" onclick="cancelUserRegistration('${String(p.id).replace("'", "\\'")}')">Cancel</button>`
+                    : `<span style="color:var(--muted);font-size:12px;">Completed</span>`}
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+}
+
+function scrollToUserRegistrations(){
+  document.getElementById('userRegistrations').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* Start the correct session if a user was already logged in. */
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(currentUser){
+    openUserPanel();
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('userApp').style.display = 'none';
+  }
+});
 
 </script>
 </body>

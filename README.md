@@ -32,7 +32,7 @@ college-event-registration-platform/
 
 ---
 
-## ⚙️ Core Modules & Workflow
+## Core Modules & Workflow
 
 ### 1. Signup System
 * **User Input**: Captures student names, official college emails, roll numbers, and passwords.
@@ -51,7 +51,7 @@ college-event-registration-platform/
 
 ---
 
-## 🛠️ Challenges Faced & Solutions
+## Challenges Faced & Solutions
 
 * **Mobile Table Layouts**: Complex administrative student tables broke horizontally on smaller phone layouts.
   * *Fix*: Applied Bootstrap’s `.table-responsive` wrapper class to enable smooth horizontal scrolling on mobile.
@@ -62,7 +62,7 @@ college-event-registration-platform/
 
 ---
 
-## 🧪 Testing Phase
+## Testing Phase
 
 * **Cross-Browser Verification**: Confirmed layout rendering uniformity across Google Chrome, Apple Safari, and Mozilla Firefox.
 * **Device Emulation**: Leveraged Chrome DevTools to simulate and fine-tune scaling on smartphones, tablets, and desktop displays.
@@ -70,6 +70,6 @@ college-event-registration-platform/
 
 ---
 
-## 🎯 Conclusion
+## Conclusion
 
 This Event Management Platform replaces manual paperwork with an organized platform. Utilizing HTML, CSS, and Bootstrap accelerates the user interface layout lifecycle, delivering an optimized utility application built to handle event registrations and helps the admin to manage and monitor platform activity in real-time through a clean, distraction-free environment.

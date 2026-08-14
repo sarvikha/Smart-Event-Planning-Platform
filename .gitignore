@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Environment variables / secrets
+.env
+.env.*
+
+# IDE / Editors
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node.js (if used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+
+# Build / cache
+.cache/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp

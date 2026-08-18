@@ -40,7 +40,7 @@
     min-height:100vh;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(135deg,var(--navy) 0%, #1a2340 45%, var(--blue-dark) 100%);
   }
-   #authScreen{
+  #authScreen{
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -52,6 +52,7 @@
     background:var(--card);width:380px;max-width:90vw;border-radius:14px;
     padding:36px 34px 30px;box-shadow:0 20px 60px rgba(0,0,0,.35);
   }
+
   .login-card h1{font-size:22px;margin:0 0 4px;letter-spacing:.3px;}
   .login-card p.sub{color:var(--muted);margin:0 0 24px;font-size:13.5px;}
   .login-card label{font-size:12.5px;font-weight:600;color:#374151;display:block;margin-bottom:6px;}
@@ -138,12 +139,12 @@
   .admin-picture-copy .img-hint{font-size:11.5px;color:var(--muted);margin-top:4px;}
   .ticket-board{background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 2px rgba(20,30,60,.04);}
   .ticket-board .ticket-board-head{
-    display:grid;grid-template-columns:1.1fr .85fr .82fr .74fr .78fr .88fr .76fr .88fr;align-items:center;
+    display:grid;grid-template-columns:1.2fr 1fr .9fr 1fr 1fr .8fr 1.2fr;align-items:center;
     background:linear-gradient(90deg, #3452a2 0%, #17356d 100%);color:#fff;
     min-height:42px;
   }
   .ticket-board .ticket-board-head .ticket-head-cell{padding:12px 14px;font-size:12px;font-weight:700;letter-spacing:.3px;}
-  .ticket-row{display:grid;grid-template-columns:1.1fr .85fr .82fr .74fr .78fr .88fr .76fr .88fr;align-items:center;min-height:76px;border-bottom:1px solid var(--border);background:#fff;}
+  .ticket-row{display:grid;grid-template-columns:1.2fr 1fr .9fr 1fr 1fr .8fr 1.2fr;align-items:center;min-height:76px;border-bottom:1px solid var(--border);background:#fff;}
   .ticket-row:nth-child(even){background:#eef3f8;}
   .ticket-row:last-child{border-bottom:none;}
   .ticket-row .ticket-cell{padding:12px 14px;font-size:13px;color:#344054;}
@@ -364,6 +365,174 @@
     .user-shell{padding:20px 14px 40px;}
   }
 
+
+  /* ---------- AI CHATBOT ---------- */
+  .ai-chat-launcher{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:58px;
+    height:58px;
+    border:0;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+    color:#fff;
+    font-size:25px;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 10px 28px rgba(0,0,0,.25);
+    transition:transform .18s,box-shadow .18s;
+  }
+  .ai-chat-launcher:hover{
+    transform:translateY(-3px) scale(1.03);
+    box-shadow:0 14px 34px rgba(0,0,0,.30);
+  }
+  .ai-chat-window{
+    position:fixed;
+    right:24px;
+    bottom:94px;
+    width:370px;
+    max-width:calc(100vw - 30px);
+    height:540px;
+    max-height:calc(100vh - 120px);
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+    z-index:1000;
+  }
+  .ai-chat-window.show{display:flex;}
+  .ai-chat-head{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    padding:15px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .ai-chat-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .ai-chat-avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#fff;
+    color:var(--blue);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+  }
+  .ai-chat-title strong{display:block;font-size:14px;}
+  .ai-chat-title span{display:block;font-size:11px;opacity:.82;margin-top:2px;}
+  .ai-chat-close{
+    border:0;
+    background:transparent;
+    color:#fff;
+    font-size:23px;
+    cursor:pointer;
+    line-height:1;
+  }
+  .ai-chat-messages{
+    flex:1;
+    overflow-y:auto;
+    padding:15px;
+    background:#f7f9fc;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .ai-message{
+    max-width:86%;
+    padding:10px 12px;
+    border-radius:13px;
+    font-size:13px;
+    line-height:1.5;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .ai-message.bot{
+    align-self:flex-start;
+    background:#fff;
+    color:#263244;
+    border:1px solid var(--border);
+    border-bottom-left-radius:4px;
+  }
+  .ai-message.user{
+    align-self:flex-end;
+    background:var(--blue);
+    color:#fff;
+    border-bottom-right-radius:4px;
+  }
+  .ai-quick{
+    padding:9px 10px;
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    background:#fff;
+    border-top:1px solid var(--border);
+  }
+  .ai-quick button{
+    flex:0 0 auto;
+    border:1px solid #dbe2ee;
+    background:#f8fafc;
+    color:#374151;
+    border-radius:999px;
+    padding:6px 9px;
+    font-size:11px;
+    cursor:pointer;
+  }
+  .ai-quick button:hover{background:#eef4ff;border-color:var(--blue);color:var(--blue-dark);}
+  .ai-chat-input-wrap{
+    display:flex;
+    gap:8px;
+    padding:10px;
+    background:#fff;
+    border-top:1px solid var(--border);
+  }
+  .ai-chat-input{
+    flex:1;
+    min-width:0;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 11px;
+    font-size:13px;
+    outline:none;
+  }
+  .ai-chat-input:focus{border-color:var(--blue);}
+  .ai-chat-send{
+    width:42px;
+    border:0;
+    border-radius:10px;
+    background:var(--blue);
+    color:#fff;
+    cursor:pointer;
+    font-size:16px;
+  }
+  .ai-chat-send:hover{background:var(--blue-dark);}
+  .ai-typing{
+    align-self:flex-start;
+    color:var(--muted);
+    font-size:11px;
+    padding:2px 8px;
+    display:none;
+  }
+  @media(max-width:650px){
+    .ai-chat-launcher{right:16px;bottom:16px;}
+    .ai-chat-window{
+      right:10px;
+      bottom:84px;
+      width:calc(100vw - 20px);
+      height:500px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -578,6 +747,41 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+
+<!-- ================= AI CHATBOT ================= -->
+<button id="aiChatLauncher" class="ai-chat-launcher" type="button"
+        onclick="toggleAIChat()" title="Open AI Assistant" aria-label="Open AI Assistant">🤖</button>
+
+<div id="aiChatWindow" class="ai-chat-window" role="dialog" aria-label="AI Assistant">
+  <div class="ai-chat-head">
+    <div class="ai-chat-title">
+      <div class="ai-chat-avatar">🤖</div>
+      <div>
+        <strong>Event Assistant</strong>
+        <span id="aiChatRole">Platform Help</span>
+      </div>
+    </div>
+    <button class="ai-chat-close" type="button" onclick="toggleAIChat()" aria-label="Close chatbot">&times;</button>
+  </div>
+
+  <div id="aiChatMessages" class="ai-chat-messages"></div>
+
+  <div class="ai-quick" id="aiQuickQuestions">
+    <button type="button" onclick="askAI('How do I register for an event?')">Register for an event</button>
+    <button type="button" onclick="askAI('What events are available?')">Available events</button>
+    <button type="button" onclick="askAI('How do I create an event?')">Create an event</button>
+    <button type="button" onclick="askAI('What can the admin dashboard do?')">Admin help</button>
+  </div>
+
+  <div id="aiTyping" class="ai-typing">Assistant is thinking...</div>
+  <form class="ai-chat-input-wrap" id="aiChatForm">
+    <input id="aiChatInput" class="ai-chat-input" type="text"
+           placeholder="Ask about the platform..." autocomplete="off">
+    <button class="ai-chat-send" type="submit" aria-label="Send">➤</button>
+  </form>
+</div>
+
 
 <!-- Generic edit modal -->
 <div class="modal-overlay" id="modalOverlay">
@@ -1410,8 +1614,10 @@ function buildTicketPayload(p){
 }
 
 function renderTickets(){
-  const registeredParticipants = participants.filter(p => String(p.status).toLowerCase() === 'registered'
-    || String(p.status).toLowerCase() === 'attended');
+  const registeredParticipants = participants.filter(p =>
+    String(p.status).toLowerCase() === 'registered' ||
+    String(p.status).toLowerCase() === 'attended'
+  );
 
   if(!registeredParticipants.length){
     return `<div class="card">
@@ -1422,37 +1628,49 @@ function renderTickets(){
 
   const ticketRows = registeredParticipants.map(p => {
     const ev = events.find(e => e.id === p.eventId);
-    const payload = `SARV-${p.id}-${p.eventId}`;
-    const attendance = String(p.status).toLowerCase() === 'attended' ? 'Present' : 'Not Attended';
+    const eventName = ev ? ev.title : 'Unknown Event';
+    const eventDate = ev ? (ev.date || 'No date') : 'No date';
+    const location = ev ? (ev.location || 'No location') : 'No location';
+    const status = p.status || 'Registered';
+    const attendance = String(status).toLowerCase() === 'attended' ? 'Present' : 'Not Attended';
     const attendanceClass = attendance === 'Present' ? 'present' : 'not-attended';
-    
+    const ticketId = `SARV-${p.id}-${p.eventId}`;
 
-    return `<div class="ticket-row">
-      <div class="ticket-cell event-name">${esc(ev ? ev.title : '—')}</div>
+    // Keep this QR payload short because the built-in QR generator is Version 1-L.
+    const payload = ticketId;
+
+    return `<div class="ticket-row"
+      data-participant-id="${p.id}"
+      data-event-id="${p.eventId}"
+      data-ticket-id="${esc(ticketId)}">
+      <div class="ticket-cell event-name">${esc(eventName)}</div>
       <div class="ticket-cell name">${esc(p.user)}</div>
-      <div class="ticket-cell ticket-status-wrap"><span class="ticket-status-badge">Active</span></div>
+      <div class="ticket-cell ticket-status-wrap"><span class="ticket-status-badge">${esc(status)}</span></div>
       <div class="ticket-cell ticket-status-wrap"><span class="ticket-attendance-badge ${attendanceClass}">${attendance}</span></div>
+      <div class="ticket-cell">${esc(eventDate)}</div>
       <div class="ticket-cell ticket-qr-cell"><canvas class="ticket-qr-canvas" data-ticket-payload="${esc(payload)}"></canvas></div>
-      <div class="ticket-cell ticket-download-cell"><button class="btn-download" onclick="downloadTicketQR(this)"><span aria-hidden="true">⇩</span>Download</button></div>
+      <div class="ticket-cell ticket-download-cell"><button class="btn-download" onclick="downloadFullTicket(this)"><span aria-hidden="true">⇩</span>Download Ticket</button></div>
     </div>`;
   }).join('');
 
   return `<div class="card">
-      <div class="card-head">
-        <h3>Tickets</h3>
-        <button class="btn btn-green" onclick="navigate('joinEventList')">Add Registered User</button>
+    <div class="card-head">
+      <h3>Tickets</h3>
+      <button class="btn btn-green" onclick="navigate('joinEventList')">Add Registered User</button>
+    </div>
+    <div class="ticket-board">
+      <div class="ticket-board-head">
+        <div class="ticket-head-cell">Event</div>
+        <div class="ticket-head-cell">Name</div>
+        <div class="ticket-head-cell">Status</div>
+        <div class="ticket-head-cell">Attendance</div>
+        <div class="ticket-head-cell">Date</div>
+        <div class="ticket-head-cell">QR</div>
+        <div class="ticket-head-cell">Download</div>
       </div>
-      <div class="ticket-board">
-        <div class="ticket-board-head">
-          <div class="ticket-head-cell">Event</div>
-          <div class="ticket-head-cell">Name</div>
-          <div class="ticket-head-cell">Event Status</div>
-          <div class="ticket-head-cell">Attendance</div>
-          <div class="ticket-head-cell">Ticket</div>
-        </div>
-        ${ticketRows}
-      </div>
-    </div>`;
+      ${ticketRows}
+    </div>
+  </div>`;
 }
 
 /* ============================================================
@@ -1619,24 +1837,154 @@ function generateTicketQRCodes(){
 }
 
 function downloadTicketQR(button){
-  const row = button.closest('.ticket-row');
-  if(!row) return;
-  const canvas = row.querySelector('canvas.ticket-qr-canvas');
-  if(!canvas){ toast('QR code is not available yet'); return; }
+  // Kept for compatibility with any older button references.
+  return downloadFullTicket(button);
+}
 
-  try {
-    const eventName = row.querySelector('.event-name')?.textContent.trim() || 'event';
-    const userName = row.querySelector('.name')?.textContent.trim() || 'participant';
-    const safeName = `${eventName}-${userName}`.replace(/[^a-z0-9_-]+/gi, '_');
+function downloadFullTicket(button){
+  const row = button.closest('.ticket-row');
+  if(!row){
+    toast('Ticket information not found');
+    return;
+  }
+
+  const participantId = Number(row.dataset.participantId);
+  const eventId = Number(row.dataset.eventId);
+  const participant = participants.find(p => p.id === participantId);
+  const event = events.find(e => e.id === eventId);
+
+  if(!participant || !event){
+    toast('Unable to create ticket');
+    return;
+  }
+
+  const qrCanvas = row.querySelector('canvas.ticket-qr-canvas');
+  if(!qrCanvas){
+    toast('QR code is not available yet');
+    return;
+  }
+
+  try{
+    const ticketId = `SARV-${participant.id}-${participant.eventId}`;
+    const status = participant.status || 'Registered';
+    const attendance = String(status).toLowerCase() === 'attended' ? 'Present' : 'Not Attended';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 700;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#f2f4f8';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Ticket card
+    ctx.fillStyle = '#ffffff';
+    if(typeof ctx.roundRect === 'function'){
+      ctx.beginPath();
+      ctx.roundRect(50, 50, 1100, 600, 25);
+      ctx.fill();
+    }else{
+      ctx.fillRect(50, 50, 1100, 600);
+    }
+
+    // Header
+    ctx.fillStyle = '#2563eb';
+    if(typeof ctx.roundRect === 'function'){
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(50, 50, 1100, 120, 25);
+      ctx.clip();
+      ctx.fillRect(50, 50, 1100, 120);
+      ctx.restore();
+    }else{
+      ctx.fillRect(50, 50, 1100, 120);
+    }
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 38px Arial';
+    ctx.fillText('EVENT MANAGEMENT PLATFORM', 90, 115);
+    ctx.font = 'bold 25px Arial';
+    ctx.fillText('EVENT TICKET', 90, 150);
+
+    // Event name
+    ctx.fillStyle = '#111827';
+    ctx.font = 'bold 36px Arial';
+    ctx.fillText(String(event.title || 'Event'), 90, 230);
+
+    // Labels
+    ctx.font = 'bold 22px Arial';
+    ctx.fillStyle = '#374151';
+    ctx.fillText('Participant', 90, 290);
+    ctx.fillText('Event Date', 90, 390);
+    ctx.fillText('Location', 90, 460);
+    ctx.fillText('Registration Status', 90, 530);
+    ctx.fillText('Attendance', 500, 390);
+    ctx.fillText('Ticket ID', 500, 460);
+
+    // Values
+    ctx.font = '24px Arial';
+    ctx.fillStyle = '#111827';
+    ctx.fillText(String(participant.user || 'Participant'), 90, 325);
+
+    ctx.font = '22px Arial';
+    ctx.fillText(String(event.date || 'No date'), 90, 420);
+    ctx.fillText(String(event.location || 'No location'), 90, 490);
+    ctx.fillText(String(status), 90, 560);
+    ctx.fillText(String(attendance), 500, 420);
+
+    ctx.font = '20px monospace';
+    ctx.fillText(ticketId, 500, 490);
+
+    // Attendance badge
+    ctx.fillStyle = attendance === 'Present' ? '#16794f' : '#64748b';
+    if(typeof ctx.roundRect === 'function'){
+      ctx.beginPath();
+      ctx.roundRect(500, 515, 180, 48, 20);
+      ctx.fill();
+    }else{
+      ctx.fillRect(500, 515, 180, 48);
+    }
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText(attendance, 525, 547);
+
+    // QR code
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(850, 210, 230, 230);
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(850, 210, 230, 230);
+
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(qrCanvas, 865, 225, 200, 200);
+    ctx.imageSmoothingEnabled = true;
+
+    ctx.fillStyle = '#374151';
+    ctx.font = 'bold 18px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Scan to verify ticket', 965, 475);
+    ctx.textAlign = 'left';
+
+    // Footer
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '16px Arial';
+    ctx.fillText('Please present this ticket at the event entrance.', 90, 615);
+
+    // Download as PNG
+    const safeEvent = String(event.title || 'Event').replace(/[^a-z0-9_-]+/gi, '_');
+    const safeUser = String(participant.user || 'Participant').replace(/[^a-z0-9_-]+/gi, '_');
     const link = document.createElement('a');
+    link.download = `Ticket-${safeEvent}-${safeUser}.png`;
     link.href = canvas.toDataURL('image/png');
-    link.download = `Sarvikha-Ticket-${safeName}.png`;
     document.body.appendChild(link);
     link.click();
     link.remove();
-  } catch(error) {
-    console.error('Could not download QR:', error);
-    toast('Could not download QR code');
+
+    toast('Ticket downloaded successfully');
+  }catch(error){
+    console.error('Could not download ticket:', error);
+    toast('Could not download ticket');
   }
 }
 
@@ -1854,16 +2202,30 @@ function renderEventsOverview(){
 }
 
 /* ---------- CREATE EVENT ---------- */
+function getTodayDate(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function renderCreateEvent(){
   const catOptions = categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')
     || '<option value="">No categories — create one first</option>';
+  const today = getTodayDate();
+
   return `
     <div class="card">
       <div class="card-head"><h3>Create Event</h3></div>
       <form class="form-grid" onsubmit="return submitCreateEvent(event)">
         <div class="field"><label>Event Title</label><input id="ev_title" required placeholder="e.g. Tech Fest"></div>
         <div class="field"><label>Category</label><select id="ev_cat">${catOptions}</select></div>
-        <div class="field"><label>Date</label><input id="ev_date" type="date"></div>
+        <div class="field">
+          <label>Date</label>
+          <input id="ev_date" type="date" min="${today}" required>
+          <small style="display:block;color:var(--muted);margin-top:5px;">Only today or a future date can be selected.</small>
+        </div>
         <div class="field"><label>Location</label><input id="ev_loc" placeholder="e.g. Main Auditorium"></div>
         <div class="field full"><label>Description</label><textarea id="ev_desc" rows="3" placeholder="Short description"></textarea></div>
         <div class="form-actions">
@@ -1873,19 +2235,40 @@ function renderCreateEvent(){
     </div>
   `;
 }
+
 function submitCreateEvent(e){
   e.preventDefault();
+
   const title = document.getElementById('ev_title').value.trim();
-  if(!title){ toast('Event title is required'); return false; }
+  if(!title){
+    toast('Event title is required');
+    return false;
+  }
+
+  const eventDate = document.getElementById('ev_date').value;
+  if(!eventDate){
+    toast('Please select an event date');
+    return false;
+  }
+
+  const today = getTodayDate();
+  if(eventDate < today){
+    toast('Event cannot be created for a past date. Please select today or a future date.');
+    return false;
+  }
+
   const catVal = document.getElementById('ev_cat').value;
+
   events.push({
     id: nextId.event++,
     title,
     categoryId: catVal ? Number(catVal) : null,
-    date: document.getElementById('ev_date').value,
+    date: eventDate,
     location: document.getElementById('ev_loc').value.trim(),
     description: document.getElementById('ev_desc').value.trim(),
   });
+
+  saveData();
   toast('Event created');
   addNotification(`Event "${title}" was created`);
   navigate('eventList');
@@ -1920,30 +2303,56 @@ function renderEventList(){
     </div>
   `;
 }
+
 function editEvent(id){
   const e = events.find(e=>e.id===id);
   if(!e) return;
+
   const catOptions = categories.map(c=>`<option value="${c.id}" ${c.id===e.categoryId?'selected':''}>${esc(c.name)}</option>`).join('');
+  const today = getTodayDate();
+
   openModal('Edit Event', `
     <div class="field"><label>Title</label><input id="m_title" value="${esc(e.title)}"></div>
     <div class="field"><label>Category</label><select id="m_cat">${catOptions}</select></div>
-    <div class="field"><label>Date</label><input id="m_date" type="date" value="${e.date||''}"></div>
+    <div class="field">
+      <label>Date</label>
+      <input id="m_date" type="date" min="${today}" value="${e.date||''}">
+      <small style="display:block;color:var(--muted);margin-top:5px;">Only today or a future date can be selected.</small>
+    </div>
     <div class="field"><label>Location</label><input id="m_loc" value="${esc(e.location||'')}"></div>
     <div class="field"><label>Description</label><textarea id="m_desc" rows="3">${esc(e.description||'')}</textarea></div>
   `, ()=>{
     const title = document.getElementById('m_title').value.trim();
-    if(!title){ toast('Title is required'); return false; }
+    if(!title){
+      toast('Title is required');
+      return false;
+    }
+
+    const eventDate = document.getElementById('m_date').value;
+    if(!eventDate){
+      toast('Please select an event date');
+      return false;
+    }
+
+    if(eventDate < getTodayDate()){
+      toast('Event date cannot be in the past. Please select today or a future date.');
+      return false;
+    }
+
     e.title = title;
     e.categoryId = Number(document.getElementById('m_cat').value);
-    e.date = document.getElementById('m_date').value;
+    e.date = eventDate;
     e.location = document.getElementById('m_loc').value.trim();
     e.description = document.getElementById('m_desc').value.trim();
+
+    saveData();
     toast('Event updated');
     addNotification(`Event "${title}" was updated`);
     navigate('eventList');
     return true;
   });
 }
+
 function deleteEvent(id){
   const ev = events.find(e=>e.id===id);
   if(!confirm('Delete this event? Related participant records will also be removed.')) return;
@@ -2667,6 +3076,280 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.getElementById('userApp').style.display = 'none';
   }
 });
+
+
+/* ============================================================
+   AI EVENT ASSISTANT
+   Local smart assistant: answers platform questions using the
+   current dashboard data. No API key or external service is
+   required.
+============================================================ */
+let aiChatInitialized = false;
+
+function getAIUserRole(){
+  if(currentUser) return 'user';
+  const app = document.getElementById('app');
+  if(app && app.style.display === 'block') return 'admin';
+  return 'guest';
+}
+
+function aiFormatDate(dateString){
+  if(!dateString) return 'date not specified';
+  const d = new Date(dateString + 'T00:00:00');
+  if(Number.isNaN(d.getTime())) return dateString;
+  return d.toLocaleDateString(undefined, {
+    day:'numeric', month:'long', year:'numeric'
+  });
+}
+
+function aiUpcomingEvents(){
+  const today = new Date().toISOString().slice(0,10);
+  return events.filter(e => !e.date || e.date >= today);
+}
+
+function aiEventSummary(){
+  const upcoming = aiUpcomingEvents();
+  if(!upcoming.length) return 'There are currently no upcoming events.';
+  return upcoming.map(e =>
+    `• ${e.title} — ${aiFormatDate(e.date)}, ${e.location || 'location not specified'}`
+  ).join('\n');
+}
+
+function aiUserRegistrationSummary(){
+  if(!currentUser) return 'Please log in as a user to view your registrations.';
+  const regs = getUserRegistrations();
+  if(!regs.length) return 'You have not registered for any events yet.';
+  return regs.map(p => {
+    const ev = events.find(e => Number(e.id) === Number(p.eventId));
+    return `• ${ev ? ev.title : 'Unknown event'} — ${p.status || 'Registered'}`;
+  }).join('\n');
+}
+
+function aiBudgetSummary(){
+  const totalBudget = (budgets || []).reduce((sum,b) => sum + (Number(b.amount) || 0), 0);
+  const totalExpenses = (expenses || []).reduce((sum,e) => sum + (Number(e.amount) || 0), 0);
+  return `Total budget: ₹${totalBudget.toLocaleString('en-IN')}\n` +
+         `Total expenses: ₹${totalExpenses.toLocaleString('en-IN')}\n` +
+         `Remaining: ₹${(totalBudget-totalExpenses).toLocaleString('en-IN')}`;
+}
+
+function aiGenerateAnswer(question){
+  const q = String(question || '').trim().toLowerCase();
+  const role = getAIUserRole();
+
+  if(!q){
+    return 'Please type a question. I can help with events, registration, tickets, the dashboard and other platform features.';
+  }
+
+  if(/\b(hi|hello|hey|good morning|good evening)\b/.test(q)){
+    return `Hello! 👋 I’m your Event Management Platform Assistant. ${
+      role === 'admin'
+        ? 'I can help you with event management, participants, tickets, categories, wish lists and budgets.'
+        : 'I can help you find events, register, cancel registrations and understand your tickets.'
+    }`;
+  }
+
+  if(/\b(who are you|what are you|your name)\b/.test(q)){
+    return 'I’m the Event Management Platform Assistant. I provide quick help about the features available in this platform.';
+  }
+
+  if(/\b(available events|upcoming events|events available|what events|list events|show events)\b/.test(q)){
+    return `Here are the current upcoming events:\n${aiEventSummary()}`;
+  }
+
+  if(/\b(register|registration|sign up)\b/.test(q) && /\b(event|events)\b/.test(q)){
+    if(role === 'admin'){
+      return 'Users can register from the User Dashboard. They select an available event and click “Register for Event”. The registration is then added to the participant list.';
+    }
+    return 'To register, open an available event in the User Dashboard and click “Register for Event”. After a successful registration, it appears under “My Registrations”.';
+  }
+
+  if(/\b(cancel|remove)\b/.test(q) && /\b(registration|event)\b/.test(q)){
+    return role === 'user'
+      ? 'Open “My Registrations” in the User Dashboard and click “Cancel” for the registration you want to remove. The dashboard refreshes after cancellation.'
+      : 'A user can cancel a registration from “My Registrations”. The shared participant data is updated and the admin receives a notification.';
+  }
+
+  if(/\b(my registrations|my registration|registered events)\b/.test(q)){
+    return role === 'user'
+      ? `Your registrations:\n${aiUserRegistrationSummary()}`
+      : '“My Registrations” is available on the User Dashboard. Admins can review registrations through the participant/join-event sections.';
+  }
+
+  if(/\b(ticket|tickets|qr|qr code)\b/.test(q)){
+    if(role === 'admin'){
+      return 'The Admin Dashboard has a Tickets section. Tickets are generated for participants whose status is Registered or Attended, and the ticket includes event, participant, status, attendance and ticket ID information.';
+    }
+    return 'After you register for an event, your registration is stored with your participant details. The platform supports event tickets with QR-code information for registered participants.';
+  }
+
+  if(/\b(create|add)\b/.test(q) && /\b(event)\b/.test(q)){
+    return role === 'admin'
+      ? 'To create an event, open “Create Event” from the Admin sidebar and enter the event details such as title, category, date, location and description.'
+      : 'Only the Admin Dashboard provides event creation. Users can browse available events and register for them.';
+  }
+
+  if(/\b(category|categories)\b/.test(q)){
+    return role === 'admin'
+      ? 'The Admin Dashboard includes Event Category, Create Category and Category List sections. Categories help organize events such as Technology, Cultural and Sports.'
+      : 'Events are organized into categories such as Technology, Cultural and Sports. You can see the category on each event card.';
+  }
+
+  if(/\b(participant|participants|member|members|join event)\b/.test(q)){
+    return role === 'admin'
+      ? `There are currently ${participants.length} participant records. The Admin Dashboard includes Add Event Member and Join Event List sections for participant management.`
+      : 'Participant information is created when a user registers for an event. Your registrations are shown in the User Dashboard.';
+  }
+
+  if(/\b(wishlist|wish list|wish)\b/.test(q)){
+    return role === 'admin'
+      ? `The Admin Dashboard includes an Event Wish List and Add Event Wish User sections. There are currently ${wishlist.length} wishlist entries.`
+      : 'The current User Dashboard focuses on browsing events and managing registrations. Event wish-list management is available in the Admin Dashboard.';
+  }
+
+  if(/\b(budget|expense|expenses|money|finance)\b/.test(q)){
+    return role === 'admin'
+      ? `Here is the current budget summary:\n${aiBudgetSummary()}`
+      : 'Budget Tracking is an Admin feature used to monitor event funds and expenses.';
+  }
+
+  if(/\b(notification|notifications|alert|alerts)\b/.test(q)){
+    return role === 'admin'
+      ? 'The Admin Dashboard has a Notifications menu. Important actions such as registrations, profile changes and theme changes can create notifications.'
+      : 'The User Dashboard currently does not have the same notification menu as the Admin Dashboard.';
+  }
+
+  if(/\b(search|find)\b/.test(q) && /\b(event|participant|category)\b/.test(q)){
+    return role === 'admin'
+      ? 'Use the search box in the Admin top bar to search events, categories and participants. Search results can take you directly to the relevant section.'
+      : 'Use the Available Events section to browse upcoming events. The current User Dashboard does not have the Admin global search box.';
+  }
+
+  if(/\b(admin dashboard|admin panel|admin features|what can admin|admin do)\b/.test(q)){
+    return 'The Admin Dashboard manages the platform. Its current sections include Dashboard, Event Category, Create Category, Category List, Events, Create Event, Event List, Add Event Member, Join Event List, Event Wish List, Add Event Wish User, Complete Event List, Tickets and Budget Tracking.';
+  }
+
+  if(/\b(user dashboard|user panel|what can user|user features|user do)\b/.test(q)){
+    return 'The User Dashboard lets users view available events, see event details, register for events, view their registrations and cancel an active registration.';
+  }
+
+  if(/\b(login|log in|sign in)\b/.test(q)){
+    return role === 'admin'
+      ? 'You are currently using the Admin Dashboard. Admin authentication is handled through the Admin Login screen.'
+      : 'Users can log in from the User tab using their email or username and password. New users can create an account from “Create Account”.';
+  }
+
+  if(/\b(sign up|create account|account)\b/.test(q)){
+    return 'To create a user account, select the User role on the authentication screen, choose “Create Account”, and enter your full name, username, email, phone number and password.';
+  }
+
+  if(/\b(logout|log out)\b/.test(q)){
+    return role === 'admin'
+      ? 'Use the logout icon in the Admin top bar to log out.'
+      : 'Use the Logout button in the User Dashboard top bar.';
+  }
+
+  if(/\b(theme|color|font|appearance)\b/.test(q)){
+    return role === 'admin'
+      ? 'The Admin top bar provides theme and font controls. You can select a color theme, customize topbar/sidebar/main-page colors, and adjust font size.'
+      : 'The User Dashboard follows the platform theme and does not currently expose the Admin theme controls.';
+  }
+
+  if(/\b(contact|help|support)\b/.test(q)){
+    return 'For platform assistance, use this chatbot for basic feature questions. The Admin top bar also includes a Contact option.';
+  }
+
+  if(/\bhow\b/.test(q) && /\buse\b/.test(q)){
+    return 'I can guide you through the platform. Try asking something specific, such as “How do I register for an event?”, “How do I create an event?”, or “How do I view tickets?”';
+  }
+
+  return `I can help with basic questions about this Event Management Platform. Try asking about:
+• available events
+• event registration
+• My Registrations
+• tickets and QR codes
+• creating events
+• participants
+• categories
+• wish lists
+• budgets and expenses
+• admin/user dashboard features`;
+}
+
+function aiAddMessage(text, sender){
+  const box = document.getElementById('aiChatMessages');
+  if(!box) return;
+  const div = document.createElement('div');
+  div.className = `ai-message ${sender}`;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function aiSetRoleLabel(){
+  const label = document.getElementById('aiChatRole');
+  if(!label) return;
+  const role = getAIUserRole();
+  label.textContent = role === 'admin' ? 'Admin Assistant' :
+                      role === 'user' ? 'User Assistant' : 'Platform Help';
+}
+
+function initAIChat(){
+  if(aiChatInitialized) return;
+  aiChatInitialized = true;
+
+  const form = document.getElementById('aiChatForm');
+  const input = document.getElementById('aiChatInput');
+
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const question = input.value.trim();
+      if(!question) return;
+      askAI(question);
+    });
+  }
+
+  aiSetRoleLabel();
+  aiAddMessage(
+    'Hello! 👋 I’m your Event Management Platform Assistant. Ask me a basic question about events, registration, tickets, dashboards or other platform features.',
+    'bot'
+  );
+}
+
+function askAI(question){
+  initAIChat();
+  const input = document.getElementById('aiChatInput');
+  if(input) input.value = '';
+
+  aiAddMessage(question, 'user');
+
+  const answer = aiGenerateAnswer(question);
+  const typing = document.getElementById('aiTyping');
+
+  if(typing) typing.style.display = 'block';
+
+  setTimeout(()=>{
+    if(typing) typing.style.display = 'none';
+    aiSetRoleLabel();
+    aiAddMessage(answer, 'bot');
+  }, 250);
+}
+
+function toggleAIChat(){
+  initAIChat();
+  const win = document.getElementById('aiChatWindow');
+  if(!win) return;
+  win.classList.toggle('show');
+  aiSetRoleLabel();
+
+  if(win.classList.contains('show')){
+    setTimeout(()=>document.getElementById('aiChatInput')?.focus(), 50);
+  }
+}
+
+/* Keep chatbot role synchronized with login/logout. */
+const originalAdminNavigateForAI = typeof navigate === 'function' ? navigate : null;
 
 </script>
 </body>

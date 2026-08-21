@@ -304,6 +304,56 @@
   .notif-item:last-child{border-bottom:none;}
   .notif-item .notif-time{font-size:11px;color:var(--muted);margin-top:2px;}
   .notif-empty{padding:20px 6px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;}
+  /* ---------- TOPBAR EVENT CALENDAR ---------- */
+  .calendar-menu{
+    display:none;position:absolute;top:38px;right:70px;background:#fff;color:var(--text);
+    border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.22);width:330px;padding:14px;z-index:150;
+  }
+  .calendar-menu.show{display:block;}
+  .calendar-head{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;
+  }
+  .calendar-head strong{font-size:14px;color:#1f2937;}
+  .calendar-nav-btn{
+    width:30px;height:30px;border:1px solid var(--border);background:#f8fafc;border-radius:7px;
+    cursor:pointer;color:#374151;font-weight:700;
+  }
+  .calendar-nav-btn:hover{background:#eef4ff;color:var(--blue);}
+  .calendar-grid{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+  }
+  .calendar-weekday{
+    text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:5px 0;
+  }
+  .calendar-day{
+    min-height:38px;border:1px solid transparent;border-radius:7px;background:#fff;
+    cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;font-size:12px;color:#374151;
+  }
+  .calendar-day:hover{background:#f3f6fc;border-color:#dbe4f5;}
+  .calendar-day.muted{color:#c0c6d0;cursor:default;}
+  .calendar-day.today{border-color:var(--blue);font-weight:700;}
+  .calendar-day.has-event{background:var(--blue-tint);color:var(--blue-dark);font-weight:700;}
+  .calendar-day.has-event.today{border-color:var(--blue-dark);}
+  .calendar-day .event-dot{
+    width:5px;height:5px;border-radius:50%;background:var(--blue);display:block;
+  }
+  .calendar-events{
+    margin-top:12px;border-top:1px solid var(--border);padding-top:10px;
+    max-height:180px;overflow:auto;
+  }
+  .calendar-event{
+    padding:9px 8px;border-radius:8px;margin-bottom:5px;background:#f8fafc;
+    cursor:pointer;border:1px solid transparent;
+  }
+  .calendar-event:hover{background:#eef4ff;border-color:#dbe4f5;}
+  .calendar-event-title{font-size:12.5px;font-weight:700;color:#1f2937;}
+  .calendar-event-meta{font-size:11px;color:var(--muted);margin-top:3px;}
+  .calendar-empty{font-size:12px;color:var(--muted);text-align:center;padding:12px 4px;}
+  @media(max-width:700px){
+    .calendar-menu{right:0;width:310px;max-width:calc(100vw - 24px);}
+  }
+
   @media(max-width:900px){
     .form-grid{grid-template-columns:1fr;}
     .stat-row{grid-template-columns:1fr 1fr;}
@@ -711,6 +761,10 @@
         &#128276;<span id="notifBadge" class="notif-badge"></span>
       </span>
 
+      <span style="position:relative;cursor:pointer;" onclick="toggleCalendarMenu()" title="Event Calendar">
+        &#128197;
+      </span>
+
       <span class="admin-name" id="adminNameDisplay" onclick="openAdminProfile()" title="Click to edit admin details">&#128100; Admin</span>
       <span style="cursor:pointer;" onclick="logout()" title="Log out">&#9211;</span>
       <div id="fontSizeMenu" class="theme-menu fontsize-menu">
@@ -751,6 +805,15 @@
           <span id="notifClear" style="font-size:11.5px;font-weight:600;color:var(--blue);cursor:pointer;" onclick="clearNotifications()">Clear all</span>
         </div>
         <div id="notifList" class="notif-list"></div>
+      </div>
+      <div id="calendarMenu" class="calendar-menu">
+        <div class="calendar-head">
+          <button type="button" class="calendar-nav-btn" onclick="changeCalendarMonth(-1)" aria-label="Previous month">&#10094;</button>
+          <strong id="calendarMonthLabel"></strong>
+          <button type="button" class="calendar-nav-btn" onclick="changeCalendarMonth(1)" aria-label="Next month">&#10095;</button>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+        <div id="calendarEvents" class="calendar-events"></div>
       </div>
     </div>
   </div>
@@ -1160,6 +1223,139 @@ function clearNotifications(){
 document.addEventListener('DOMContentLoaded', ()=>{ renderNotifBadge(); renderNotifList(); });
 
 /* ============================================================
+   EVENT CALENDAR
+============================================================ */
+let calendarViewDate = new Date();
+let selectedCalendarDate = getTodayDate();
+
+function formatCalendarDate(date){
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function calendarDateLabel(dateString){
+  const parts = String(dateString).split('-').map(Number);
+  if(parts.length !== 3 || parts.some(Number.isNaN)) return dateString;
+  const d = new Date(parts[0], parts[1]-1, parts[2]);
+  return d.toLocaleDateString(undefined, {day:'numeric', month:'short', year:'numeric'});
+}
+
+function toggleCalendarMenu(){
+  const menu = document.getElementById('calendarMenu');
+  const opening = !menu.classList.contains('show');
+
+  document.getElementById('themeMenu').classList.remove('show');
+  document.getElementById('notifMenu').classList.remove('show');
+  document.getElementById('fontSizeMenu').classList.remove('show');
+
+  menu.classList.toggle('show');
+
+  if(opening){
+    calendarViewDate = new Date();
+    selectedCalendarDate = getTodayDate();
+    renderCalendar();
+  }
+}
+
+function changeCalendarMonth(offset){
+  calendarViewDate = new Date(
+    calendarViewDate.getFullYear(),
+    calendarViewDate.getMonth() + offset,
+    1
+  );
+  renderCalendar();
+}
+
+function selectCalendarDate(dateString){
+  selectedCalendarDate = dateString;
+  renderCalendar();
+
+  const dayEvents = events.filter(ev => ev.date === dateString);
+  if(dayEvents.length === 1){
+    navigate('eventList');
+  }
+}
+
+function renderCalendar(){
+  const label = document.getElementById('calendarMonthLabel');
+  const grid = document.getElementById('calendarGrid');
+  const eventList = document.getElementById('calendarEvents');
+  if(!label || !grid || !eventList) return;
+
+  const year = calendarViewDate.getFullYear();
+  const month = calendarViewDate.getMonth();
+
+  label.textContent = calendarViewDate.toLocaleDateString(undefined, {
+    month:'long',
+    year:'numeric'
+  });
+
+  const firstDay = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startDay = firstDay.getDay();
+
+  const eventDates = new Set(events.map(ev => ev.date).filter(Boolean));
+  const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  let html = weekdays.map(day =>
+    `<div class="calendar-weekday">${day}</div>`
+  ).join('');
+
+  for(let i = 0; i < startDay; i++){
+    html += `<div class="calendar-day muted"></div>`;
+  }
+
+  const today = getTodayDate();
+
+  for(let day = 1; day <= daysInMonth; day++){
+    const date = formatCalendarDate(new Date(year, month, day));
+    const hasEvent = eventDates.has(date);
+    const classes = [
+      'calendar-day',
+      date === today ? 'today' : '',
+      hasEvent ? 'has-event' : ''
+    ].filter(Boolean).join(' ');
+
+    html += `
+      <button type="button" class="${classes}" onclick="selectCalendarDate('${date}')">
+        <span>${day}</span>
+        ${hasEvent ? '<span class="event-dot"></span>' : ''}
+      </button>
+    `;
+  }
+
+  grid.innerHTML = html;
+
+  const selectedEvents = events
+    .filter(ev => ev.date === selectedCalendarDate)
+    .sort((a,b) => String(a.title).localeCompare(String(b.title)));
+
+  if(selectedEvents.length){
+    eventList.innerHTML = `
+      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;">
+        Events on ${calendarDateLabel(selectedCalendarDate)}
+      </div>
+      ${selectedEvents.map(ev => `
+        <div class="calendar-event" onclick="navigate('eventList')">
+          <div class="calendar-event-title">${esc(ev.title)}</div>
+          <div class="calendar-event-meta">
+            ${esc(categoryName(ev.categoryId))} ${ev.location ? '• ' + esc(ev.location) : ''}
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }else{
+    eventList.innerHTML = `
+      <div class="calendar-empty">
+        No events on ${calendarDateLabel(selectedCalendarDate)}.
+      </div>
+    `;
+  }
+}
+
+/* ============================================================
    COLOR THEMES
 ============================================================ */
 const THEMES = {
@@ -1283,6 +1479,7 @@ document.addEventListener('click', function(e){
   const themeMenu = document.getElementById('themeMenu');
   const notifMenu = document.getElementById('notifMenu');
   const fontSizeMenu = document.getElementById('fontSizeMenu');
+  const calendarMenu = document.getElementById('calendarMenu');
   const searchResults = document.getElementById('searchResults');
   if(themeMenu && !themeMenu.contains(e.target) && !e.target.closest('[onclick="toggleThemeMenu()"]')){
     themeMenu.classList.remove('show');
@@ -1292,6 +1489,9 @@ document.addEventListener('click', function(e){
   }
   if(fontSizeMenu && !fontSizeMenu.contains(e.target) && !e.target.closest('[onclick="toggleFontMenu()"]')){
     fontSizeMenu.classList.remove('show');
+  }
+  if(calendarMenu && !calendarMenu.contains(e.target) && !e.target.closest('[onclick="toggleCalendarMenu()"]')){
+    calendarMenu.classList.remove('show');
   }
   if(searchResults && !searchResults.contains(e.target) && !e.target.closest('.topbar-search-wrap')){
     searchResults.classList.remove('show');
